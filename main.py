@@ -20,7 +20,7 @@ pygame.display.set_caption("HackSheffield9 game (WIP)")
 # pygame.display.set_icon(icon)
 
 #Paw
-pawImg = pygame.image.load('img\paw.png')
+pawImg = pygame.image.load('img/paw.png')
 pawX = 0
 pawY = 0
 
@@ -51,9 +51,9 @@ while running:
             if event.key == pygame.K_SPACE:
                 start = True
         if event.type == pygame.MOUSEBUTTONDOWN:
-            pawImg = pygame.image.load('img\paw_claw.png')
+            pawImg = pygame.image.load('img/paw_claw.png')
         elif event.type == pygame.MOUSEBUTTONUP:
-            pawImg = pygame.image.load('img\paw.png')
+            pawImg = pygame.image.load('img/paw.png')
 
 
 
