@@ -29,7 +29,10 @@ catSound = mixer.Sound("sounds/miau.wav")
 
 # title screen assets
 startBtn = pygame.image.load('img/start_button.png')
-startBtnRect = pygame.Rect((screenX / 2) - (startBtn.get_width() / 2), 300, (screenX / 2) - (startBtn.get_width() / 2) + 200, 420)
+startBtnRect = pygame.Rect((screenX / 2) - (startBtn.get_width() / 2), 300,
+                           (screenX / 2) - (startBtn.get_width() / 2) + 200, 420)
+lore = pygame.image.load("img/lorem ipsum.png")
+
 
 def meowRNG():
     roll = random.randint(0, 5)
@@ -48,6 +51,14 @@ def title_text():
 
 def start_button():
     screen.blit(startBtn, ((screenX / 2) - (startBtn.get_width() / 2), 300))
+
+
+loreY = 0
+
+
+def show_lore(y):
+    screen.blit(lore, (0, y))
+
 
 # Game Loop
 running = True
@@ -78,15 +89,23 @@ while running:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if startBtnRect.collidepoint(pygame.mouse.get_pos()):
                     print("start button pressed")
+                    scene = "exposition"
+
+        if scene == "exposition":
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    print("space button pressed")
                     scene = "living-room"
 
     if scene == "title":
         title_text()
         start_button()
+    elif scene == "exposition":
+        show_lore(loreY)
+        loreY -= .3
     elif scene == "living-room":
         background = pygame.image.load('img/living-room.png')
         screen.blit(background, (0, 0))
-
 
     paw(pawX, pawY)
     pygame.display.update()
