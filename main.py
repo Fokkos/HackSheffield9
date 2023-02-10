@@ -33,6 +33,26 @@ def temp_text():
     text = font.render("press space to start", True, (255, 255, 255))
     screen.blit(text, (200, 250))
 
+
+# living room scene
+class Bookshelf(pygame.sprite.Sprite):
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.image = pygame.image.load("img/bookshelf.png")
+        self.rect = self.image.get_rect()
+        self.rect.center = (160,520)
+    
+    def pop_book(self):
+
+        self.image = pygame.image.load("img/bookshelf.png")
+        screen.blit(self.image, (50, 50))
+
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
+
+
+B1 = Bookshelf()       
 # Game Loop
 running = True
 while running:
@@ -52,8 +72,11 @@ while running:
                 start = True
         if event.type == pygame.MOUSEBUTTONDOWN:
             pawImg = pygame.image.load('img/paw_claw.png')
+
+            
         elif event.type == pygame.MOUSEBUTTONUP:
             pawImg = pygame.image.load('img/paw.png')
+        
 
 
 
