@@ -50,6 +50,11 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 start = True
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            pawImg = pygame.image.load('img\paw_claw.png')
+        elif event.type == pygame.MOUSEBUTTONUP:
+            pawImg = pygame.image.load('img\paw.png')
+
 
 
 
