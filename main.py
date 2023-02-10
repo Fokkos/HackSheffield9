@@ -52,14 +52,48 @@ def title_text():
 def start_button():
     screen.blit(startBtn, ((screenX / 2) - (startBtn.get_width() / 2), 300))
 
-
 loreY = 0
-
-
 def show_lore(y):
     screen.blit(lore, (0, y))
 
+# bookshelf class 
+class Bookshelf(pygame.sprite.Sprite):
 
+    def __init__(self) -> None:
+        super().__init__()
+        self.image = pygame.image.load("img/bookshelf.png")
+        self.rect = self.image.get_rect()
+        self.rect.center = (160,220)
+    
+    def pop_book(self, screen, bookpage):
+        
+        
+        bookpage.draw(screen)
+
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
+
+# bookpage class 
+class Bookpage(pygame.sprite.Sprite):
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.image = pygame.image.load("img/bookpage_tutorial.png")
+        self.rect = self.image.get_rect()
+        self.rect.center = (460,220)
+    
+
+    def draw(self, screen):
+        
+        screen.blit(self.image, self.rect)
+
+
+#bookshelf and bookpage objects
+bookShelf = Bookshelf()
+bookpage = Bookpage()
+
+#sets if book is clicked from the shelf
+isBookOpened = False
 # Game Loop
 running = True
 while running:
@@ -81,6 +115,19 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             pawImg = pygame.image.load('img/paw_claw.png')
             meowRNG()
+            bookshelf_rect = bookShelf.rect
+            bookpage_rect = bookpage.rect
+
+            #checks if bookshelf or page is clicked on
+            if bookshelf_rect.collidepoint(pygame.mouse.get_pos()):
+                print("book pressed")
+                isBookOpened = True
+            elif bookpage_rect.collidepoint(pygame.mouse.get_pos()):
+                print("book scratched")
+                isBookOpened = False
+                
+
+
         elif event.type == pygame.MOUSEBUTTONUP:
             pawImg = pygame.image.load('img/paw.png')
             catSound.stop()
@@ -106,6 +153,12 @@ while running:
     elif scene == "living-room":
         background = pygame.image.load('img/living-room.png')
         screen.blit(background, (0, 0))
+        bookShelf.draw(screen)
+
+        #displays book page
+        if isBookOpened:
+            bookShelf.pop_book(screen, bookpage)
+        
 
     paw(pawX, pawY)
     pygame.display.update()
