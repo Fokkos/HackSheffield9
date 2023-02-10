@@ -1,5 +1,5 @@
 import pygame
-import random
+from pygame import mixer
 
 #Initialise pygame
 pygame.init()
@@ -23,6 +23,8 @@ pygame.display.set_caption("HackSheffield9 game (WIP)")
 pawImg = pygame.image.load('img/paw.png')
 pawX = 0
 pawY = 0
+
+catSound = mixer.Sound("sounds/miau.wav")
 
 def paw(x, y):
     screen.blit(pawImg, (x, y))
@@ -52,8 +54,10 @@ while running:
                 start = True
         if event.type == pygame.MOUSEBUTTONDOWN:
             pawImg = pygame.image.load('img/paw_claw.png')
+            catSound.play()
         elif event.type == pygame.MOUSEBUTTONUP:
             pawImg = pygame.image.load('img/paw.png')
+            catSound.stop()
 
 
 
