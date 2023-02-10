@@ -1,7 +1,7 @@
 import pygame
 from pygame import mixer
 
-#Initialise pygame
+# initialise pygame
 pygame.init()
 
 # create the screen
@@ -14,10 +14,10 @@ start = False
 
 font = pygame.font.Font('freesansbold.ttf', 32)
 
-# Caption and Icon
-pygame.display.set_caption("HackSheffield9 game (WIP)")
-# icon = pygame.image.load('ufo.png') SET LATER
-# pygame.display.set_icon(icon)
+# caption and icon
+pygame.display.set_caption("kitty simulator >:3")
+icon = pygame.image.load('img/icon.jpg')
+pygame.display.set_icon(icon)
 
 #Paw
 pawImg = pygame.image.load('img/paw.png')
