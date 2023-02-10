@@ -28,7 +28,7 @@ def paw(x, y):
     screen.blit(pawImg, (x, y))
 
 def temp_text():
-    text = font.render("HACKSHEFFIELD 9!!!!!", True, (255, 255, 255))
+    text = font.render("kitty simulator >:3", True, (255, 255, 255))
     screen.blit(text, (200, 200))
     text = font.render("press space to start", True, (255, 255, 255))
     screen.blit(text, (200, 250))
