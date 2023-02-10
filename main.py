@@ -8,6 +8,8 @@ pygame.init()
 screenX = 800
 screenY = 600
 screen = pygame.display.set_mode((screenX, screenY))
+pygame.mouse.set_cursor((8,8),(0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0))    #make cursor invisible
+start = False
 
 
 font = pygame.font.Font('freesansbold.ttf', 32)
@@ -16,6 +18,14 @@ font = pygame.font.Font('freesansbold.ttf', 32)
 pygame.display.set_caption("HackSheffield9 game (WIP)")
 # icon = pygame.image.load('ufo.png') SET LATER
 # pygame.display.set_icon(icon)
+
+#Paw
+pawImg = pygame.image.load('img\paw.png')
+pawX = 0
+pawY = 0
+
+def paw(x, y):
+    screen.blit(pawImg, (x, y))
 
 def temp_text(x, y):
     text = font.render("HACKSHEFFIELD 9!!!!!" , True, (255, 255, 255))
@@ -31,5 +41,17 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    temp_text(300, 200)
+        if event.type == pygame.MOUSEMOTION:
+            start = True
+            mousePosX, mousePosY = pygame.mouse.get_pos()
+            pawX = mousePosX - (pawImg.get_width() / 2)
+            pawY = mousePosY - 100
+
+
+
+
+    if start == False:
+        temp_text(300, 200)
+    else:
+        paw(pawX, pawY)
     pygame.display.update()
