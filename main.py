@@ -27,9 +27,11 @@ pawY = 0
 def paw(x, y):
     screen.blit(pawImg, (x, y))
 
-def temp_text(x, y):
-    text = font.render("HACKSHEFFIELD 9!!!!!" , True, (255, 255, 255))
-    screen.blit(text, (x, y))
+def temp_text():
+    text = font.render("HACKSHEFFIELD 9!!!!!", True, (255, 255, 255))
+    screen.blit(text, (200, 200))
+    text = font.render("press space to start", True, (255, 255, 255))
+    screen.blit(text, (200, 250))
 
 # Game Loop
 running = True
@@ -42,16 +44,18 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEMOTION:
-            start = True
             mousePosX, mousePosY = pygame.mouse.get_pos()
             pawX = mousePosX - (pawImg.get_width() / 2)
             pawY = mousePosY - 100
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                start = True
 
 
 
 
     if start == False:
-        temp_text(300, 200)
+        temp_text()
     else:
         paw(pawX, pawY)
     pygame.display.update()
