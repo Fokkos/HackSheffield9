@@ -46,7 +46,7 @@ while running:
         if event.type == pygame.MOUSEMOTION:
             mousePosX, mousePosY = pygame.mouse.get_pos()
             pawX = mousePosX - (pawImg.get_width() / 2)
-            pawY = mousePosY - 100
+            pawY = mousePosY - 50
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 start = True
