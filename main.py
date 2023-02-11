@@ -145,8 +145,12 @@ while running:
                     #elif book_page.rect.collidepoint(pygame.mouse.get_pos()):
                     #    is_book_opened = False
                 else:   #hover
-                    if pygame.Rect(77, 334, 279, 421).collidepoint(pygame.mouse.get_pos()):
+                    if pygame.Rect(77, 334, 200, 90).collidepoint(pygame.mouse.get_pos()):
                         state_bookshelf = "init_light_bottom_shelf"
+                    elif pygame.Rect(141, 181, 40, 50).collidepoint(pygame.mouse.get_pos()):
+                        state_bookshelf = "init_light_dark_blue"
+                    elif pygame.Rect(190, 260, 45, 65).collidepoint(pygame.mouse.get_pos()):
+                        state_bookshelf = "init_light_sage"
                     else:
                         state_bookshelf = "default"
             else:
@@ -158,8 +162,6 @@ while running:
                     #else:
                         state_bookshelf = "final_nolight"
 
-
-            print(state_bookshelf)
             bookshelf.changeState(state_bookshelf)
 
 

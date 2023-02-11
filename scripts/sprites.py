@@ -41,6 +41,10 @@ class Bookshelf(GameSprite):
             self.setImage("img/living-room/bookshelf_default.png", (250, 350))
         elif state == "init_light_bottom_shelf":
             self.setImage("img/living-room/bookshelf_initial_light_bottom_shelf.png", (250, 350))
+        elif state == "init_light_dark_blue":
+            self.setImage("img/living-room/bookshelf_initial_light_dark_blue.png", (250, 350))
+        elif state == "init_light_sage":
+            self.setImage("img/living-room/bookshelf_initial_light_sage.png", (250, 350))
         elif state == "final_light_keypad":
             self.setImage("img/living-room/bookshelf_final_light_keypad.png", (250, 350))
         elif state == "final_nolight":
