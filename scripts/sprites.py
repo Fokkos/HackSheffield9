@@ -166,7 +166,8 @@ class Chaosbar():
         
         
     def update(self, screen):
-        pygame.draw.rect(screen, (0,128,0), (600, 10, (5 * (10 - self.clean_house)), 30))
+        pygame.draw.rect(screen, (255,0,0), (600, 10, 150, 30)) # NEW
+        pygame.draw.rect(screen, (0,128,0), (600, 10, (15 * (10 - self.clean_house)), 30))
 
     def damageReport(self):
         return str(constants.HOUSE_HEALTH - self.clean_house)

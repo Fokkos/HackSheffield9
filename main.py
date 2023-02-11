@@ -271,12 +271,13 @@ while running:
                 else:
                     state_fridge = "default"
             fridge.changeState(state_fridge)
-
+            
             # salmon minigame logic
             if state_salmon_visible:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if pygame.Rect(150, 100, 500, 300).collidepoint(pygame.mouse.get_pos()):
                         if pygame.Rect(250, 175, 300, 175).collidepoint(pygame.mouse.get_pos()):
+                            chaos_bar.hit(1)
                             match(state_salmon):
                                 case "default":
                                     state_salmon = "one_bite"
@@ -289,9 +290,11 @@ while running:
                                 case "two_bites":
                                     state_salmon = "finish"
                                     chomp_sound.play()
+                                    # chaos_bar.hit(3)
                                     #inventory.append("salmon")
                                     break
                                 case "finish":
+                                    
                                     break
                     else:
                         state_salmon_visible = False
