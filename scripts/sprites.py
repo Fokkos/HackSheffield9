@@ -119,7 +119,7 @@ class Fridge(GameSprite):
         elif state == "highlighted":
             self.setImage("img/kitchen/fridge_light.png", (150, 300))
 
-class Fridge(GameSprite):
+class Salmon(GameSprite):
     def __init__(self) -> None:
         size = (500, 300)
         pos = (400, 250)
