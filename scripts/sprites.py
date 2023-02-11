@@ -78,3 +78,15 @@ class SageBook(GameSprite):
             self.setImage("img/living-room/sage_book.png", (600, 400))
         elif state == "torn":
             self.setImage("img/living-room/sage_book_torn.png", (600, 400))
+
+class Armchair(GameSprite):
+    def __init__(self) -> None:
+        size = (180, 220)
+        pos = (550, 350)
+        createClass(self, "img/living-room/armchair.png", size, pos)
+
+    def changeState(self, state):
+        if state == "default":
+            self.setImage("img/living-room/armchair.png", (180, 220))
+        elif state == "highlighted":
+            self.setImage("img/living-room/armchair_light.png", (180, 220))

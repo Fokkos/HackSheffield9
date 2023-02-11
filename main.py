@@ -62,10 +62,12 @@ state_bookshelf_bottom = "default"
 state_armchair = "default"
 state_blue_book = "invisible"
 state_sage_book = "invisible"
+state_armchair = "default"
 
 bookshelf = sprites.Bookshelf()
 blue_book = sprites.BlueBook()
 sage_book = sprites.SageBook()
+armchair = sprites.Armchair()
 
 
 # sets the background size and position taking inventory bar into account
@@ -199,8 +201,21 @@ while running:
                         state_bookshelf = "final_light_sage"
                     else:
                         state_bookshelf = "final_nolight"
-
             bookshelf.changeState(state_bookshelf)
+
+            # armchair logic
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.Rect(520, 340, 100, 50).collidepoint(pygame.mouse.get_pos()):
+                    print("program pillow interactivity")
+            else:  # hover
+                if pygame.Rect(520, 340, 100, 50).collidepoint(pygame.mouse.get_pos()):
+                    state_armchair = "highlighted"
+                else:
+                    state_armchair = "default"
+            armchair.changeState(state_armchair)
+
+
+
 
 
 
@@ -216,6 +231,7 @@ while running:
 
         set_background('img/living-room/living-room.png')
         bookshelf.draw(screen)
+        armchair.draw(screen)
         show_inventory = True
 
         if state_blue_book == "visible" or state_blue_book == "eaten":
