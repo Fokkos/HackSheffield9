@@ -1,5 +1,5 @@
 import pygame
-
+import constants
 
 class GameSprite(pygame.sprite.Sprite):
     def __init__(self) -> None:
@@ -135,6 +135,7 @@ class Salmon(GameSprite):
         elif state == "finish":
             self.setImage("img/kitchen/salmon_final.png", (500, 300))
 
+<<<<<<< HEAD
 class Sink(GameSprite):
     def __init__(self) -> None:
         size = (280, 260)
@@ -152,6 +153,23 @@ class Sink(GameSprite):
             self.setImage("img/kitchen/sink_on.png", (280, 260))
         elif state == "sink_door_light":
             self.setImage("img/kitchen/sink_on.png", (280, 260))
+=======
+class Cabinet(GameSprite):
+    #TODO: Enter coordinates 
+    def __init__(self) -> None:
+        size = (150, 300)
+        pos = (650, 275)
+        createClass(self, "img/kitchen/fridge.png", size, pos)
+    
+
+    def changeState(self, state):
+        if state == "default":
+            self.setImage("img/kitchen/fridge.png", (150, 300))
+        elif state == "highlighted":
+            self.setImage("img/kitchen/fridge_light.png", (150, 300))
+        elif state == "opened":
+            self.setImage()
+>>>>>>> 86f95ef9c8a4f7185078d9a59e8eda2577671cba
 
 class Chaosbar():
 
@@ -168,7 +186,24 @@ class Chaosbar():
         
         
     def update(self, screen):
-        pygame.draw.rect(screen, (0,128,0), (600, 10, (5 * (10 - self.clean_house)), 30))
+        self.default_bar(screen)# NEW
+        pygame.draw.rect(screen, (0,128,0), (600, 10, (15 * (10 - self.clean_house)), 30))
+
+    def damageReport(self):
+        damage = (constants.HOUSE_HEALTH - self.clean_house)
+        msg = ""
+        if damage == 0:
+            msg = "Mittens retired from a life of crime"
+        
+        elif damage < constants.HOUSE_HEALTH / 3:
+            msg = "Minor damage done. Perhaps Mittens has grown fond of his new place"
+        
+        elif damage == constants.HOUSE_HEALTH:
+            msg = "Master would be proud"
+        else: 
+            msg = "Enough damage has been done"
+        return msg
+
 
 
 class Endings():
@@ -181,6 +216,6 @@ class Endings():
     def draw(self,msg,screen):
         font = pygame.font.Font('freesansbold.ttf', 32)
 
-        summary = "Game over. You have "+ msg + " damage"
+        summary = "Game over. "+ msg 
         text = font.render(summary, True, (255, 255, 255))
         screen.blit(text, (200, 200))
