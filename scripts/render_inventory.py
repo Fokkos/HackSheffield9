@@ -36,6 +36,12 @@ def createSprite(name, x):
                                      "img/inventory/book.png",
                                      x)
             return sprite
+        case "salmon":
+            sprite = InventorySprite("salmon",
+                                     "mmm, yummy, could make a nice ingredient!",
+                                     "img/inventory/salmon.png",
+                                     x)
+            return sprite
 
 
 # checks if mouse is hovering over sprite, if so, show description and name
@@ -54,7 +60,7 @@ def checkCollision(sprite, screen):
 # used to render each item in the players inventory
 def render_inventory_bar(screen, inventory):
     x = 60
-    dx = 88  # rough spacing to fit all items, can do maths later ig
+    dx = 80  # rough spacing to fit all items, can do maths later ig
     for item in inventory:
         sprite = createSprite(item, x)
         sprite.draw(screen)

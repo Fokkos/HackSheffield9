@@ -291,7 +291,7 @@ while running:
                                     state_salmon = "finish"
                                     chomp_sound.play()
                                     # chaos_bar.hit(3)
-                                    #inventory.append("salmon")
+                                    inventory.append("salmon")
                                     break
                                 case "finish":
                                     
