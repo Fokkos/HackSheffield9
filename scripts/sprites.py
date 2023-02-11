@@ -96,6 +96,24 @@ class Armchair(GameSprite):
         ending1.draw(screen)
 
 
+class Chaosbar():
+
+    def __init__(self, clean_house) -> None:
+        self.clean_house = clean_house
+    def default_bar(self, screen):
+        font = pygame.font.Font('freesansbold.ttf', 22)
+        text = font.render("Chaos bar", True, (255, 255, 255))
+        screen.blit(text, (450, 10))
+        pygame.draw.rect(screen, (255,0,0), (600, 10, 150, 30)) # NEW
+    
+    def hit(self, damage_points):
+        self.clean_house = self.clean_house - damage_points
+        
+        
+    def update(self, screen):
+        pygame.draw.rect(screen, (0,128,0), (600, 10, (5 * (10 - self.clean_house)), 30))
+
+
 class Endings():
 
     

@@ -38,6 +38,14 @@ pygame.display.set_icon(icon)
 inventory_bar = pygame.image.load("img/inventory/inventory.png")
 inventory = []
 
+#chaos bar
+# clean_house = 10
+ 
+
+# def hit(clean_house , screen):
+#     clean_house -= 1
+#     pygame.draw.rect(screen, (0,128,0), (600, 10, (5 * (10 - clean_house)), 30))
+
 # paw initial values
 paw_img = pygame.image.load('img/player/Paw.png')
 pawX = 0
@@ -68,6 +76,7 @@ bookshelf = sprites.Bookshelf()
 blue_book = sprites.BlueBook()
 sage_book = sprites.SageBook()
 armchair = sprites.Armchair()
+chaos_bar = sprites.Chaosbar(10)
 
 ending1 = sprites.Endings()
 
@@ -97,9 +106,11 @@ def draw_inventory():
 
 
 # Game Loop
+
 running = True
 while running:
 
+    
     # RGB = Red, Green, Blue
     screen.fill((0, 0, 0))
     # Background Image
@@ -146,6 +157,7 @@ while running:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if pygame.Rect(100, 50, 600, 400).collidepoint(pygame.mouse.get_pos()):
                         state_blue_book = "eaten"
+                        chaos_bar.hit(1)
                         chomp_sound.play()
             elif state_blue_book == "eaten":
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -156,6 +168,7 @@ while running:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if pygame.Rect(100, 50, 600, 400).collidepoint(pygame.mouse.get_pos()):
                         state_sage_book = "torn"
+                        chaos_bar.hit(2)
                         tear_sound.play()
             elif state_sage_book == "torn":
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -168,17 +181,20 @@ while running:
                     if state_blue_book == "invisible":
                         state_blue_book = "visible"
                     else:
+                        
                         state_blue_book = "eaten"
                 elif pygame.Rect(187, 265, 40, 75).collidepoint(pygame.mouse.get_pos()):
                     if state_sage_book == "invisible":
                         state_sage_book = "visible"
                     else:
+                        
                         state_sage_book = "torn"
 
             if state_bookshelf_bottom == "default":
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if pygame.Rect(77, 334, 279, 421).collidepoint(pygame.mouse.get_pos()):
                         state_bookshelf_bottom = "knocked"
+                        chaos_bar.hit(2)
                     else:
                         state_bookshelf = "default"
                 else:   #hover
@@ -235,18 +251,25 @@ while running:
         set_background('img/living-room/living-room.png')
         bookshelf.draw(screen)
         armchair.draw(screen)
+        chaos_bar.default_bar(screen)
+        # pygame.draw.rect(screen, (255,0,0), (600, 10, 150, 30))
         show_inventory = True
+        chaos_bar.update(screen)
 
         if state_blue_book == "visible" or state_blue_book == "eaten":
             blue_book.draw(screen)
         if state_blue_book == "eaten":
             blue_book.changeState("eaten")
+            
+            
 
         if state_sage_book == "visible" or state_sage_book == "torn":
             sage_book.draw(screen)
         if state_sage_book == "torn":
             sage_book.changeState("torn")
-
+            
+            
+        chaos_bar.update(screen)
     elif scene == "ending":
         #TODO: Change image and update message to display progress
         set_background('img/living-room/living-room.png')
@@ -259,5 +282,6 @@ while running:
             render_inventory.render_inventory_bar(screen, inventory)
 
     paw(pawX, pawY)
-
+    
+    
     pygame.display.update()
