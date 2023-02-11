@@ -7,7 +7,7 @@ from scripts import render_inventory, sprites
 import constants
 
 # TODO:
-# name. the. cat.
+# name. the. cat. mittens :3
 # write the lore at the start of the game
 # draw sprites and environments
 # work out interactions
@@ -77,6 +77,8 @@ state_oven = "default"
 state_plant_pot = "default"
 state_fridge = "default"
 state_sink = "default"
+
+fridge = sprites.Fridge()
 
 
 
@@ -242,6 +244,19 @@ while running:
                     state_living_room_right_door = "default"
             living_room_right_door.changeState(state_living_room_right_door)
 
+        elif scene == "kitchen":
+
+            # fridge logic
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.Rect(580, 130, 145, 295).collidepoint(pygame.mouse.get_pos()):
+                    print("fridge clicked")
+            else:  # hover
+                if pygame.Rect(580, 130, 145, 295).collidepoint(pygame.mouse.get_pos()):
+                    state_fridge = "highlighted"
+                else:
+                    state_fridge = "default"
+            fridge.changeState(state_fridge)
+
     if scene == "title":
         screen.blit(title_screen, (0, 0))
         start_button.draw(screen)
@@ -268,6 +283,7 @@ while running:
 
     elif scene == "kitchen":
         set_background('img/kitchen/kitchen.png')
+        fridge.draw(screen)
 
     elif scene == "ending":
         #TODO: Change image and update message to display progress
