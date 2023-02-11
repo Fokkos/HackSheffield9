@@ -23,6 +23,7 @@ screenY = 600
 screen = pygame.display.set_mode((screenX, screenY))
 pygame.mouse.set_cursor((8, 8), (0, 0), (0, 0, 0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0, 0, 0))  # make cursor invisible
 start = False
+showInventory = False
 scene = "title"  # look into setting as a dictionary?
 
 font = pygame.font.Font('freesansbold.ttf', 32)
@@ -31,6 +32,9 @@ font = pygame.font.Font('freesansbold.ttf', 32)
 pygame.display.set_caption("kitty simulator >:3")
 icon = pygame.image.load('img/icon.jpg')
 pygame.display.set_icon(icon)
+
+# inventory
+inventory = pygame.image.load("img/inventory.png")
 
 # paw initial values
 pawImg = pygame.image.load('img/paw.png')
@@ -42,7 +46,7 @@ loreMusic = mixer.Sound("sounds/space-odyssey.wav")
 
 # lore page assets
 lore = pygame.image.load("img/lorem ipsum.png")
-loreY = 0
+loreY = 75
 
 
 # plays the meow sound with a probability of 1/n+1
@@ -63,6 +67,10 @@ def title_text():
 
 def show_lore(y):
     screen.blit(lore, (0, y))
+
+
+def draw_inventory():
+    screen.blit(inventory, (0, screenY - inventory.get_height()))
 
 
 class StartButton(pygame.sprite.Sprite):
@@ -178,13 +186,21 @@ while running:
         show_lore(loreY)
         loreY -= .3
     elif scene == "living-room":
+
         background = pygame.image.load('img/living-room.png')
         screen.blit(background, (0, 0))
         bookShelf.draw(screen)
+        showInventory = True
 
         # displays book page
         if isBookOpened:
             bookShelf.pop_book(screen, bookpage)
 
+    if showInventory:
+        draw_inventory()
+
     paw(pawX, pawY)
+
+
+
     pygame.display.update()
