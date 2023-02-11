@@ -297,7 +297,7 @@ while running:
                                 case "two_bites":
                                     state_salmon = "finish"
                                     chomp_sound.play()
-                                    #inventory.append("salmon")
+                                    inventory.append("salmon")
                                     break
                                 case "finish":
                                     break
