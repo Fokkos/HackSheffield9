@@ -95,6 +95,32 @@ class Armchair(GameSprite):
     def catSleep(self, screen, ending1):
         ending1.draw(screen)
 
+class RightDoor(GameSprite):
+    def __init__(self) -> None:
+        size = (64, 315)
+        pos = (775, 318)
+        createClass(self, "img/living-room/door_right.png", size, pos)
+
+    def changeState(self, state):
+        if state == "default":
+            self.setImage("img/living-room/door_right.png", (64, 315))
+        elif state == "highlighted":
+            self.setImage("img/living-room/door_right_light.png", (64, 315))
+
+class Fridge(GameSprite):
+    def __init__(self) -> None:
+        size = (150, 300)
+        pos = (650, 275)
+        createClass(self, "img/kitchen/fridge.png", size, pos)
+
+    def changeState(self, state):
+        if state == "default":
+            self.setImage("img/kitchen/fridge.png", (150, 300))
+        elif state == "highlighted":
+            self.setImage("img/kitchen/fridge_light.png", (150, 300))
+
+
+
 
 class Chaosbar():
 

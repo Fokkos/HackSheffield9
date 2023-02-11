@@ -7,7 +7,7 @@ from scripts import render_inventory, sprites
 import constants
 
 # TODO:
-# name. the. cat.
+# name. the. cat. mittens :3
 # write the lore at the start of the game
 # draw sprites and environments
 # work out interactions
@@ -50,6 +50,7 @@ inventory = []
 paw_img = pygame.image.load('img/player/Paw.png')
 pawX = 0
 pawY = 0
+claw_mark = []
 
 cat_sound = mixer.Sound("sounds/miau.wav")
 tear_sound = mixer.Sound("sounds/tear.wav")
@@ -71,13 +72,26 @@ state_armchair = "default"
 state_blue_book = "invisible"
 state_sage_book = "invisible"
 state_armchair = "default"
+state_living_room_right_door = "default"
 
 bookshelf = sprites.Bookshelf()
 blue_book = sprites.BlueBook()
 sage_book = sprites.SageBook()
 armchair = sprites.Armchair()
+living_room_right_door = sprites.RightDoor()
+
+# kitchen assets
+state_oven = "default"
+state_plant_pot = "default"
+state_fridge = "default"
+state_sink = "default"
+
+fridge = sprites.Fridge()
+
+
 chaos_bar = sprites.Chaosbar(10)
 
+# ending assets
 ending1 = sprites.Endings()
 
 
@@ -129,9 +143,11 @@ while running:
             print(pygame.mouse.get_pos())
             paw_img = pygame.image.load('img/player/paw_claw.png')
             meow_rng(5)
+            claw_mark.append(pygame.mouse.get_pos())
         elif event.type == pygame.MOUSEBUTTONUP:
             paw_img = pygame.image.load('img/player/Paw.png')
             cat_sound.stop()
+            claw_mark = []
 
         if scene == "title":
             if start_button.rect.collidepoint(pygame.mouse.get_pos()):
@@ -233,12 +249,29 @@ while running:
                     state_armchair = "default"
             armchair.changeState(state_armchair)
 
+            # door logic
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.Rect(740, 160, 60, 300).collidepoint(pygame.mouse.get_pos()):
+                    scene = "kitchen"
+            else:  # hover
+                if pygame.Rect(740, 160, 60, 300).collidepoint(pygame.mouse.get_pos()):
+                    state_living_room_right_door = "highlighted"
+                else:
+                    state_living_room_right_door = "default"
+            living_room_right_door.changeState(state_living_room_right_door)
 
+        elif scene == "kitchen":
 
-
-
-
-
+            # fridge logic
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.Rect(580, 130, 145, 295).collidepoint(pygame.mouse.get_pos()):
+                    print("fridge clicked")
+            else:  # hover
+                if pygame.Rect(580, 130, 145, 295).collidepoint(pygame.mouse.get_pos()):
+                    state_fridge = "highlighted"
+                else:
+                    state_fridge = "default"
+            fridge.changeState(state_fridge)
 
     if scene == "title":
         screen.blit(title_screen, (0, 0))
@@ -251,6 +284,7 @@ while running:
         set_background('img/living-room/living-room.png')
         bookshelf.draw(screen)
         armchair.draw(screen)
+        living_room_right_door.draw(screen)
         chaos_bar.default_bar(screen)
         # pygame.draw.rect(screen, (255,0,0), (600, 10, 150, 30))
         show_inventory = True
@@ -268,13 +302,17 @@ while running:
         if state_sage_book == "torn":
             sage_book.changeState("torn")
             
+    elif scene == "kitchen":
+        set_background('img/kitchen/kitchen.png')
+        fridge.draw(screen)
+
             
         chaos_bar.update(screen)
     elif scene == "ending":
         #TODO: Change image and update message to display progress
         set_background('img/living-room/living-room.png')
 
-        ending1.draw("hi",screen)
+        ending1.draw("hi", screen)
 
     if show_inventory:
         draw_inventory()
@@ -282,6 +320,7 @@ while running:
             render_inventory.render_inventory_bar(screen, inventory)
 
     paw(pawX, pawY)
+
     
     
     pygame.display.update()
