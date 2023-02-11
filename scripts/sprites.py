@@ -1,5 +1,5 @@
 import pygame
-
+import constants
 
 class GameSprite(pygame.sprite.Sprite):
     def __init__(self) -> None:
@@ -121,6 +121,21 @@ class Fridge(GameSprite):
 
 
 
+class Cabinet(GameSprite):
+    #TODO: Enter coordinates 
+    def __init__(self) -> None:
+        size = (150, 300)
+        pos = (650, 275)
+        createClass(self, "img/kitchen/fridge.png", size, pos)
+    
+
+    def changeState(self, state):
+        if state == "default":
+            self.setImage("img/kitchen/fridge.png", (150, 300))
+        elif state == "highlighted":
+            self.setImage("img/kitchen/fridge_light.png", (150, 300))
+        elif state == "opened":
+            self.setImage()
 
 class Chaosbar():
 
@@ -138,6 +153,9 @@ class Chaosbar():
         
     def update(self, screen):
         pygame.draw.rect(screen, (0,128,0), (600, 10, (5 * (10 - self.clean_house)), 30))
+
+    def damageReport(self):
+        return str(constants.HOUSE_HEALTH - self.clean_house)
 
 
 class Endings():

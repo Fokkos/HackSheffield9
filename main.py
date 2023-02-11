@@ -38,14 +38,6 @@ pygame.display.set_icon(icon)
 inventory_bar = pygame.image.load("img/inventory/inventory.png")
 inventory = []
 
-#chaos bar
-# clean_house = 10
- 
-
-# def hit(clean_house , screen):
-#     clean_house -= 1
-#     pygame.draw.rect(screen, (0,128,0), (600, 10, (5 * (10 - clean_house)), 30))
-
 # paw initial values
 paw_img = pygame.image.load('img/player/Paw.png')
 pawX = 0
@@ -89,7 +81,7 @@ state_sink = "default"
 fridge = sprites.Fridge()
 
 
-chaos_bar = sprites.Chaosbar(10)
+chaos_bar = sprites.Chaosbar(constants.HOUSE_HEALTH)
 
 # ending assets
 ending1 = sprites.Endings()
@@ -312,7 +304,7 @@ while running:
         #TODO: Change image and update message to display progress
         set_background('img/living-room/living-room.png')
 
-        ending1.draw("hi", screen)
+        ending1.draw(chaos_bar.damageReport(), screen)
 
     if show_inventory:
         draw_inventory()
