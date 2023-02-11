@@ -2,6 +2,8 @@ import pygame
 import random
 from pygame import mixer
 
+import sprites
+
 # TODO:
 # name. the. cat.
 # come up with final title of game
@@ -72,54 +74,12 @@ def show_lore(y):
 def draw_inventory():
     screen.blit(inventory, (0, screenY - inventory.get_height()))
 
-
-class StartButton(pygame.sprite.Sprite):
-
-    def __init__(self) -> None:
-        super().__init__()
-        self.image = pygame.image.load("img/start_button.png")
-        self.rect = self.image.get_rect()
-        self.rect.center = (screenX / 2, 350)
-
-    def draw(self, screen):
-        screen.blit(self.image, self.rect)
-
-
-# bookshelf class
-class Bookshelf(pygame.sprite.Sprite):
-
-    def __init__(self) -> None:
-        super().__init__()
-        self.image = pygame.transform.scale(pygame.image.load("img/bookshelf.png"), (270, 240))
-        self.rect = self.image.get_rect()
-        self.rect.center = (275, 300)
-
-    def pop_book(self, screen, bookpage):
-        bookpage.draw(screen)
-
-    def draw(self, screen):
-        screen.blit(self.image, self.rect)
-
-
-# bookpage class
-class Bookpage(pygame.sprite.Sprite):
-
-    def __init__(self) -> None:
-        super().__init__()
-        self.image = pygame.image.load("img/bookpage_tutorial.png")
-        self.rect = self.image.get_rect()
-        self.rect.center = (460, 220)
-
-    def draw(self, screen):
-        screen.blit(self.image, self.rect)
-
-
 # title screen assets
-startBtn = StartButton()
+startBtn = sprites.StartButton()
 
 # bookshelf and bookpage objects
-bookShelf = Bookshelf()
-bookpage = Bookpage()
+bookShelf = sprites.Bookshelf()
+bookpage = sprites.BookPage()
 
 # sets if book is clicked from the shelf
 isBookOpened = False
