@@ -2,6 +2,18 @@ import pygame
 import random
 from pygame import mixer
 
+# TODO:
+# name. the. cat.
+# come up with final title of game
+# create better looking title screen
+# write the lore at the start of the game
+# create an abstract class for Sprites
+# draw sprites and environments
+# work out interactions
+# inventory system (decide whether always visible or toolbar (i.e. minecraft))
+# come up with "win conditions"
+# make endings depending on what player does
+
 # initialise pygame
 pygame.init()
 
@@ -128,10 +140,16 @@ while running:
             catSound.stop()
 
         if scene == "title":
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if startBtn.rect.collidepoint(pygame.mouse.get_pos()):
+            if startBtn.rect.collidepoint(pygame.mouse.get_pos()):
+                if event.type == pygame.MOUSEBUTTONDOWN:
                     print("start button pressed")
                     scene = "exposition"
+                else:
+                    startBtn.image = pygame.image.load("img/start_button-hover.png")
+            else:
+                startBtn.image = pygame.image.load("img/start_button.png")
+
+
 
         elif scene == "exposition":
             if event.type == pygame.KEYDOWN:
