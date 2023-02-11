@@ -11,6 +11,9 @@ class GameSprite(pygame.sprite.Sprite):
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
+    def setImage(self, img_link, size):
+        self.image = pygame.transform.scale(pygame.image.load(img_link), size)
+
 
 def createClass(sprite, img_link, size, pos):
     sprite.image = pygame.transform.scale(pygame.image.load(img_link), size)
@@ -25,7 +28,7 @@ class StartButton(GameSprite):
 
 class Bookshelf(GameSprite):
     def __init__(self) -> None:
-        createClass(self, "img/BOOKSHELF.png", (270, 240), (300, 270))
+        createClass(self, "img/bookshelf.png", (270, 240), (300, 270))
 
     def pop_book(self, screen, bookpage):
         bookpage.draw(screen)

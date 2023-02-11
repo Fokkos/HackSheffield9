@@ -2,7 +2,9 @@ import pygame
 import random
 from pygame import mixer
 
+import render_inventory
 import sprites
+import scripts
 
 # TODO:
 # name. the. cat.
@@ -36,7 +38,8 @@ icon = pygame.image.load('img/icon.jpg')
 pygame.display.set_icon(icon)
 
 # inventory
-inventory = pygame.image.load("img/inventory.png")
+inventory_bar = pygame.image.load("img/inventory.png")
+inventory = []
 
 # paw initial values
 pawImg = pygame.image.load('img/paw.png')
@@ -72,7 +75,7 @@ def show_lore(y):
 
 
 def draw_inventory():
-    screen.blit(inventory, (0, screenY - inventory.get_height()))
+    screen.blit(inventory_bar, (0, screenY - inventory_bar.get_height()))
 
 # title screen assets
 startBtn = sprites.StartButton()
@@ -115,9 +118,9 @@ while running:
                     loreMusic.play()
                     scene = "exposition"
                 else:
-                    startBtn.image = pygame.image.load("img/start_button-hover.png")
+                    startBtn.setImage("img/start_button-hover.png", (200, 120))
             else:
-                startBtn.image = pygame.image.load("img/start_button.png")
+                startBtn.setImage("img/start_button.png", (200, 120))
 
 
 
@@ -155,9 +158,12 @@ while running:
         # displays book page
         if isBookOpened:
             bookShelf.pop_book(screen, bookpage)
+            inventory.append("book")
 
     if showInventory:
         draw_inventory()
+        if len(inventory) > 0:
+            render_inventory.render_inventory_bar(screen, inventory)
 
     paw(pawX, pawY)
 
