@@ -2,9 +2,8 @@ import pygame
 import random
 from pygame import mixer
 
-import render_inventory
 import sprites
-import scripts
+from scripts import render_inventory
 
 # TODO:
 # name. the. cat.
@@ -76,6 +75,7 @@ def show_lore(y):
 
 def draw_inventory():
     screen.blit(inventory_bar, (0, screenY - inventory_bar.get_height()))
+
 
 # title screen assets
 startBtn = sprites.StartButton()
@@ -158,7 +158,8 @@ while running:
         # displays book page
         if isBookOpened:
             bookShelf.pop_book(screen, bookpage)
-            inventory.append("book")
+            if "book" not in inventory:
+                inventory.append("book")
 
     if showInventory:
         draw_inventory()
@@ -166,7 +167,5 @@ while running:
             render_inventory.render_inventory_bar(screen, inventory)
 
     paw(pawX, pawY)
-
-
 
     pygame.display.update()
