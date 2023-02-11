@@ -4,7 +4,7 @@ import pygame
 class GameSprite(pygame.sprite.Sprite):
     def __init__(self) -> None:
         super().__init__()
-        self.image = pygame.transform.scale(pygame.image.load("img/icon.jpg"), (50, 50))
+        self.image = pygame.transform.scale(pygame.image.load("../img/icon.jpg"), (50, 50))
         self.rect = self.image.get_rect()
         self.rect.center = (0, 0)
 

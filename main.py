@@ -2,15 +2,14 @@ import pygame
 import random
 from pygame import mixer
 
-import sprites
-from scripts import render_inventory
+from scripts import render_inventory, sprites
+import constants
 
 # TODO:
 # name. the. cat.
 # come up with final title of game
 # create better looking title screen
 # write the lore at the start of the game
-# create an abstract class for Sprites
 # draw sprites and environments
 # work out interactions
 # inventory system (decide whether always visible or toolbar (i.e. minecraft))
@@ -21,8 +20,8 @@ from scripts import render_inventory
 pygame.init()
 
 # create the screen
-screenX = 800
-screenY = 600
+screenX = constants.SCREEN_X
+screenY = constants.SCREEN_Y
 screen = pygame.display.set_mode((screenX, screenY))
 pygame.mouse.set_cursor((8, 8), (0, 0), (0, 0, 0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0, 0, 0))  # make cursor invisible
 start = False
