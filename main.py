@@ -87,12 +87,9 @@ fridge = sprites.Fridge()
 salmon_minigame = sprites.Salmon()
 sink = sprites.Sink()
 
-<<<<<<< HEAD
-# chaos meter
-chaos_bar = sprites.Chaosbar(10)
-=======
+#chaos meter
 chaos_bar = sprites.Chaosbar(constants.HOUSE_HEALTH)
->>>>>>> 86f95ef9c8a4f7185078d9a59e8eda2577671cba
+
 
 # ending assets
 ending1 = sprites.Endings()
