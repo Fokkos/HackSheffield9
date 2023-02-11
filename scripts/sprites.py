@@ -90,3 +90,22 @@ class Armchair(GameSprite):
             self.setImage("img/living-room/armchair.png", (180, 220))
         elif state == "highlighted":
             self.setImage("img/living-room/armchair_light.png", (180, 220))
+
+    #short ending where the cat retires to bed
+    def catSleep(self, screen, ending1):
+        ending1.draw(screen)
+
+
+class Endings():
+
+    
+
+    def __init__(self) -> None:
+        print("ye")
+    
+    def draw(self,msg,screen):
+        font = pygame.font.Font('freesansbold.ttf', 32)
+
+        summary = "Game over. You have "+ msg + " damage"
+        text = font.render(summary, True, (255, 255, 255))
+        screen.blit(text, (200, 200))

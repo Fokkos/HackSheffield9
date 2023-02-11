@@ -69,6 +69,8 @@ blue_book = sprites.BlueBook()
 sage_book = sprites.SageBook()
 armchair = sprites.Armchair()
 
+ending1 = sprites.Endings()
+
 
 # sets the background size and position taking inventory bar into account
 def set_background(img_link):
@@ -207,6 +209,7 @@ while running:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.Rect(520, 340, 100, 50).collidepoint(pygame.mouse.get_pos()):
                     print("program pillow interactivity")
+                    scene = "ending"
             else:  # hover
                 if pygame.Rect(520, 340, 100, 50).collidepoint(pygame.mouse.get_pos()):
                     state_armchair = "highlighted"
@@ -243,6 +246,12 @@ while running:
             sage_book.draw(screen)
         if state_sage_book == "torn":
             sage_book.changeState("torn")
+
+    elif scene == "ending":
+        #TODO: Change image and update message to display progress
+        set_background('img/living-room/living-room.png')
+
+        ending1.draw("hi",screen)
 
     if show_inventory:
         draw_inventory()
