@@ -44,9 +44,11 @@ pawX = 0
 pawY = 0
 claw_mark = []
 
+# SFX
 cat_sound = mixer.Sound("sounds/miau.wav")
 tear_sound = mixer.Sound("sounds/tear.wav")
 chomp_sound = mixer.Sound("sounds/chomp.wav")
+door_sound = mixer.Sound("sounds/door.wav")
 
 # title screen assets
 title_screen = pygame.image.load("img/title-screen/title_screen.png")
@@ -236,6 +238,7 @@ while running:
             # door logic
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.Rect(740, 160, 60, 300).collidepoint(pygame.mouse.get_pos()):
+                    door_sound.play()
                     scene = "kitchen"
             else:  # hover
                 if pygame.Rect(740, 160, 60, 300).collidepoint(pygame.mouse.get_pos()):
@@ -249,7 +252,9 @@ while running:
             # fridge logic
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.Rect(580, 130, 145, 295).collidepoint(pygame.mouse.get_pos()):
+                    door_sound.play()
                     print("fridge clicked")
+                    # program the salmon minigame!
             else:  # hover
                 if pygame.Rect(580, 130, 145, 295).collidepoint(pygame.mouse.get_pos()):
                     state_fridge = "highlighted"

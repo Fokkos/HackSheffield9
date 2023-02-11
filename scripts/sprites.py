@@ -119,7 +119,21 @@ class Fridge(GameSprite):
         elif state == "highlighted":
             self.setImage("img/kitchen/fridge_light.png", (150, 300))
 
+class Fridge(GameSprite):
+    def __init__(self) -> None:
+        size = (500, 300)
+        pos = (400, 250)
+        createClass(self, "img/kitchen/salmon_full.png", size, pos)
 
+    def changeState(self, state):
+        if state == "default":
+            self.setImage("img/kitchen/salmon_full.png", (500, 300))
+        elif state == "one_bite":
+            self.setImage("img/kitchen/salmon_one.png", (500, 300))
+        elif state == "two_bites":
+            self.setImage("img/kitchen/salmon_two.png", (500, 300))
+        elif state == "finish":
+            self.setImage("img/kitchen/salmon_final.png", (500, 300))
 
 
 class Endings():
