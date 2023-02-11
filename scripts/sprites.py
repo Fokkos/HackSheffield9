@@ -107,6 +107,18 @@ class RightDoor(GameSprite):
         elif state == "highlighted":
             self.setImage("img/living-room/door_right_light.png", (64, 315))
 
+class LeftDoor(GameSprite):
+    def __init__(self) -> None:
+        size = (64, 350)
+        pos = (25, 290)
+        createClass(self, "img/living-room/door_left.png", size, pos)
+
+    def changeState(self, state):
+        if state == "default":
+            self.setImage("img/living-room/door_left.png", (64, 350))
+        elif state == "highlighted":
+            self.setImage("img/living-room/door_left_light.png", (64, 350))
+
 class Fridge(GameSprite):
     def __init__(self) -> None:
         size = (150, 300)
@@ -149,9 +161,29 @@ class Sink(GameSprite):
         elif state == "default_tap_on":
             self.setImage("img/kitchen/sink_on.png", (280, 260))
         elif state == "sink_door_light":
-            self.setImage("img/kitchen/sink_on.png", (280, 260))
-        elif state == "sink_door_light":
-            self.setImage("img/kitchen/sink_on.png", (280, 260))
+            self.setImage("img/kitchen/sink_door_light.png", (280, 260))
+        elif state == "sink_on_door_light":
+            self.setImage("img/kitchen/sink_on_door_light.png", (280, 260))
+
+class Cabinet(GameSprite):
+    def __init__(self) -> None:
+        size = (500, 300)
+        pos = (400, 250)
+        createClass(self, "img/kitchen/cabinet.png", size, pos)
+
+    def changeState(self, state):
+        if state == "default":
+            self.setImage("img/kitchen/cabinet.png", (500, 300))
+        elif state == "lighter_light":
+            self.setImage("img/kitchen/cabinet_lighter_light.png", (500, 300))
+        elif state == "empty":
+            self.setImage("img/kitchen/cabinet_empty.png", (500, 300))
+
+class Oven(GameSprite):
+    def __init__(self) -> None:
+        size = (240, 180)
+        pos = (205, 335)
+        createClass(self, "img/kitchen/oven.png", size, pos)
 
 class Chaosbar():
 

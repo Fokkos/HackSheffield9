@@ -49,6 +49,7 @@ cat_sound = mixer.Sound("sounds/miau.wav")
 tear_sound = mixer.Sound("sounds/tear.wav")
 chomp_sound = mixer.Sound("sounds/chomp.wav")
 door_sound = mixer.Sound("sounds/door.wav")
+water_sound = mixer.Sound("sounds/water.wav")
 
 # title screen assets
 title_screen = pygame.image.load("img/title-screen/title_screen.png")
@@ -80,16 +81,21 @@ state_salmon = "default"
 state_salmon_visible = False
 state_sink = "default"
 state_sink_tap = False
-state_oven = "default"
+state_cabinet = "default"
+state_cabinet_visible = False
+state_lighter = False
 state_plant_pot = "default"
+state_kitchen_left_door = "default"
 
 fridge = sprites.Fridge()
 salmon_minigame = sprites.Salmon()
 sink = sprites.Sink()
+cabinet = sprites.Cabinet()
+oven = sprites.Oven()
+kitchen_left_door = sprites.LeftDoor()
 
-#chaos meter
+# chaos meter
 chaos_bar = sprites.Chaosbar(constants.HOUSE_HEALTH)
-
 
 # ending assets
 ending1 = sprites.Endings()
@@ -124,7 +130,6 @@ def draw_inventory():
 running = True
 while running:
 
-    
     # RGB = Red, Green, Blue
     screen.fill((0, 0, 0))
     # Background Image
@@ -197,13 +202,12 @@ while running:
                     if state_blue_book == "invisible":
                         state_blue_book = "visible"
                     else:
-                        
+
                         state_blue_book = "eaten"
                 elif pygame.Rect(187, 265, 40, 75).collidepoint(pygame.mouse.get_pos()):
                     if state_sage_book == "invisible":
                         state_sage_book = "visible"
                     else:
-                        
                         state_sage_book = "torn"
 
             if state_bookshelf_bottom == "default":
@@ -213,7 +217,7 @@ while running:
                         chaos_bar.hit(2)
                     else:
                         state_bookshelf = "default"
-                else:   #hover
+                else:  # hover
                     if pygame.Rect(73, 341, 200, 65).collidepoint(pygame.mouse.get_pos()):
                         state_bookshelf = "init_light_bottom_shelf"
                     elif pygame.Rect(138, 193, 35, 60).collidepoint(pygame.mouse.get_pos()):
@@ -226,7 +230,7 @@ while running:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if pygame.Rect(208, 344, 50, 50).collidepoint(pygame.mouse.get_pos()):
                         print("implement keypad")
-                else:   #hover
+                else:  # hover
                     if pygame.Rect(208, 344, 50, 50).collidepoint(pygame.mouse.get_pos()):
                         state_bookshelf = "final_light_keypad"
                     elif pygame.Rect(138, 193, 35, 60).collidepoint(pygame.mouse.get_pos()):
@@ -249,7 +253,7 @@ while running:
                     state_armchair = "default"
             armchair.changeState(state_armchair)
 
-            # door logic
+            # right living room door logic
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.Rect(740, 160, 60, 300).collidepoint(pygame.mouse.get_pos()):
                     door_sound.play()
@@ -276,7 +280,7 @@ while running:
                 else:
                     state_fridge = "default"
             fridge.changeState(state_fridge)
-            
+
             # salmon minigame logic
             if state_salmon_visible:
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -301,7 +305,7 @@ while running:
                                     inventory.append("salmon")
                                     break
                                 case "finish":
-                                    
+
                                     break
                     else:
                         state_salmon_visible = False
@@ -310,11 +314,13 @@ while running:
             # sink logic
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.Rect(430, 165, 100, 80).collidepoint(pygame.mouse.get_pos()) and not state_sink_tap:
-                    # TODO: tap noise
-                    print("sink on!")
+                    water_sound.play()
+                    chaos_bar.hit(1)
                     state_sink_tap = True
                 elif pygame.Rect(440, 300, 140, 120).collidepoint(pygame.mouse.get_pos()):
                     print("cupboard clicked")
+                    state_cabinet_visible = True
+                    door_sound.play()
 
             else:  # hover
                 if pygame.Rect(430, 165, 100, 80).collidepoint(pygame.mouse.get_pos()):
@@ -332,7 +338,33 @@ while running:
                         state_sink = "default"
             sink.changeState(state_sink)
 
+            # cabinet logic
+            if state_cabinet_visible:
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if pygame.Rect(150, 100, 500, 300).collidepoint(pygame.mouse.get_pos()):
+                        if pygame.Rect(550, 250, 45, 100).collidepoint(pygame.mouse.get_pos()) and not state_lighter:
+                            state_cabinet = "empty"
+                            inventory.append("lighter")
+                            state_lighter = True
 
+                    else:
+                        state_cabinet_visible = False
+                else:
+                    if pygame.Rect(550, 250, 45, 100).collidepoint(pygame.mouse.get_pos()) and not state_lighter:
+                        state_cabinet = "lighter_light"
+            cabinet.changeState(state_cabinet)
+
+            # left kitchen door logic
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.Rect(0, 120, 70, 330).collidepoint(pygame.mouse.get_pos()):
+                    door_sound.play()
+                    scene = "living-room"
+            else:  # hover
+                if pygame.Rect(0, 120, 70, 330).collidepoint(pygame.mouse.get_pos()):
+                    state_kitchen_left_door = "highlighted"
+                else:
+                    state_kitchen_left_door = "default"
+            kitchen_left_door.changeState(state_kitchen_left_door)
 
     if scene == "title":
         screen.blit(title_screen, (0, 0))
@@ -355,26 +387,27 @@ while running:
             blue_book.draw(screen)
         if state_blue_book == "eaten":
             blue_book.changeState("eaten")
-            
-            
 
         if state_sage_book == "visible" or state_sage_book == "torn":
             sage_book.draw(screen)
         if state_sage_book == "torn":
             sage_book.changeState("torn")
-            
+
     elif scene == "kitchen":
         set_background('img/kitchen/kitchen.png')
         fridge.draw(screen)
         sink.draw(screen)
+        oven.draw(screen)
+        kitchen_left_door.draw(screen)
 
         if state_salmon_visible:
             salmon_minigame.draw(screen)
+        elif state_cabinet_visible:
+            cabinet.draw(screen)
 
-            
         chaos_bar.update(screen)
     elif scene == "ending":
-        #TODO: Change image and update message to display progress
+        # TODO: Change image and update message to display progress
         set_background('img/living-room/living-room.png')
 
         ending1.draw(chaos_bar.damageReport(), screen)
@@ -386,6 +419,4 @@ while running:
 
     paw(pawX, pawY)
 
-    
-    
     pygame.display.update()
