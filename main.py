@@ -10,7 +10,7 @@ import constants
 # name. the. cat. mittens :3
 # write the lore at the start of the game
 # draw sprites and environments
-# work out interactions
+# work out interactions ¬¬
 # inventory system (decide whether always visible or toolbar (i.e. minecraft))
 # come up with "win conditions"
 # make endings depending on what player does
@@ -44,9 +44,11 @@ pawX = 0
 pawY = 0
 claw_mark = []
 
+# SFX
 cat_sound = mixer.Sound("sounds/miau.wav")
 tear_sound = mixer.Sound("sounds/tear.wav")
 chomp_sound = mixer.Sound("sounds/chomp.wav")
+door_sound = mixer.Sound("sounds/door.wav")
 
 # title screen assets
 title_screen = pygame.image.load("img/title-screen/title_screen.png")
@@ -73,13 +75,15 @@ armchair = sprites.Armchair()
 living_room_right_door = sprites.RightDoor()
 
 # kitchen assets
+state_fridge = "default"
+state_salmon = "default"
+state_salmon_visible = False
 state_oven = "default"
 state_plant_pot = "default"
-state_fridge = "default"
 state_sink = "default"
 
 fridge = sprites.Fridge()
-
+salmon_minigame = sprites.Salmon()
 
 chaos_bar = sprites.Chaosbar(constants.HOUSE_HEALTH)
 
@@ -244,6 +248,7 @@ while running:
             # door logic
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.Rect(740, 160, 60, 300).collidepoint(pygame.mouse.get_pos()):
+                    door_sound.play()
                     scene = "kitchen"
             else:  # hover
                 if pygame.Rect(740, 160, 60, 300).collidepoint(pygame.mouse.get_pos()):
@@ -257,13 +262,43 @@ while running:
             # fridge logic
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.Rect(580, 130, 145, 295).collidepoint(pygame.mouse.get_pos()):
+                    door_sound.play()
                     print("fridge clicked")
+                    state_salmon_visible = True
             else:  # hover
                 if pygame.Rect(580, 130, 145, 295).collidepoint(pygame.mouse.get_pos()):
                     state_fridge = "highlighted"
                 else:
                     state_fridge = "default"
             fridge.changeState(state_fridge)
+
+            # salmon minigame logic
+            if state_salmon_visible:
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if pygame.Rect(150, 100, 500, 300).collidepoint(pygame.mouse.get_pos()):
+                        if pygame.Rect(250, 175, 300, 175).collidepoint(pygame.mouse.get_pos()):
+                            match(state_salmon):
+                                case "default":
+                                    state_salmon = "one_bite"
+                                    chomp_sound.play()
+                                    break
+                                case "one_bite":
+                                    state_salmon = "two_bites"
+                                    chomp_sound.play()
+                                    break
+                                case "two_bites":
+                                    state_salmon = "finish"
+                                    chomp_sound.play()
+                                    #inventory.append("salmon")
+                                    break
+                                case "finish":
+                                    break
+                    else:
+                        state_salmon_visible = False
+            salmon_minigame.changeState(state_salmon)
+
+
+
 
     if scene == "title":
         screen.blit(title_screen, (0, 0))
@@ -297,6 +332,9 @@ while running:
     elif scene == "kitchen":
         set_background('img/kitchen/kitchen.png')
         fridge.draw(screen)
+
+        if state_salmon_visible:
+            salmon_minigame.draw(screen)
 
             
         chaos_bar.update(screen)
