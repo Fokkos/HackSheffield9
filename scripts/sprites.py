@@ -23,12 +23,14 @@ def createClass(sprite, img_link, size, pos):
 
 class StartButton(GameSprite):
     def __init__(self) -> None:
-        createClass(self, "img/start_button.png", (200, 120), (400, 350))
+        createClass(self, "img/start_button.png", (200, 120), (130, 340))
 
 
 class Bookshelf(GameSprite):
     def __init__(self) -> None:
-        createClass(self, "img/bookshelf.png", (270, 240), (300, 270))
+        size = (400, 370)
+        pos = (340, 245)
+        createClass(self, "img/bookshelf.png", size, pos)
 
     def pop_book(self, screen, bookpage):
         bookpage.draw(screen)

@@ -23,9 +23,9 @@ pygame.init()
 screenX = constants.SCREEN_X
 screenY = constants.SCREEN_Y
 screen = pygame.display.set_mode((screenX, screenY))
-pygame.mouse.set_cursor((8, 8), (0, 0), (0, 0, 0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0, 0, 0))  # make cursor invisible
+#pygame.mouse.set_cursor((8, 8), (0, 0), (0, 0, 0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0, 0, 0))  # make cursor invisible
 start = False
-showInventory = False
+show_inventory = False
 scene = "title"  # look into setting as a dictionary?
 
 font = pygame.font.Font('freesansbold.ttf', 32)
@@ -40,27 +40,35 @@ inventory_bar = pygame.image.load("img/inventory.png")
 inventory = []
 
 # paw initial values
-pawImg = pygame.image.load('img/paw.png')
+paw_img = pygame.image.load('img/paw.png')
 pawX = 0
 pawY = 0
 
-catSound = mixer.Sound("sounds/miau.wav")
-loreMusic = mixer.Sound("sounds/space-odyssey.wav")
+cat_sound = mixer.Sound("sounds/miau.wav")
+
+# title screen assets
+title_screen = pygame.image.load("img/title_screen.png")
+start_button = sprites.StartButton()
 
 # lore page assets
+lore_music = mixer.Sound("sounds/space-odyssey.wav")
 lore = pygame.image.load("img/lorem ipsum.png")
 loreY = 75
 
+# sets the background size and position taking inventory bar into account
+def set_background(img_link):
+    screen.blit(pygame.transform.scale(pygame.image.load(img_link), (800, 500)), (0, 0))
+
 
 # plays the meow sound with a probability of 1/n+1
-def meowRNG(n):
+def meow_rng(n):
     roll = random.randint(0, n)
     if roll == 0:
-        catSound.play()
+        cat_sound.play()
 
 
 def paw(x, y):
-    screen.blit(pawImg, (x, y))
+    screen.blit(paw_img, (x, y))
 
 
 def title_text():
@@ -75,16 +83,12 @@ def show_lore(y):
 def draw_inventory():
     screen.blit(inventory_bar, (0, screenY - inventory_bar.get_height()))
 
-
-# title screen assets
-startBtn = sprites.StartButton()
-
 # bookshelf and bookpage objects
-bookShelf = sprites.Bookshelf()
+book_shelf = sprites.Bookshelf()
 bookpage = sprites.BookPage()
 
 # sets if book is clicked from the shelf
-isBookOpened = False
+is_book_opened = False
 # Game Loop
 running = True
 while running:
@@ -98,28 +102,28 @@ while running:
             running = False
         if event.type == pygame.MOUSEMOTION:
             mousePosX, mousePosY = pygame.mouse.get_pos()
-            pawX = mousePosX - (pawImg.get_width() / 2)
+            pawX = mousePosX - (paw_img.get_width() / 2)
             pawY = mousePosY - 50
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 start = True
         if event.type == pygame.MOUSEBUTTONDOWN:
-            pawImg = pygame.image.load('img/paw_claw.png')
-            meowRNG(5)
+            paw_img = pygame.image.load('img/paw_claw.png')
+            meow_rng(5)
         elif event.type == pygame.MOUSEBUTTONUP:
-            pawImg = pygame.image.load('img/paw.png')
-            catSound.stop()
+            paw_img = pygame.image.load('img/paw.png')
+            cat_sound.stop()
 
         if scene == "title":
-            if startBtn.rect.collidepoint(pygame.mouse.get_pos()):
+            if start_button.rect.collidepoint(pygame.mouse.get_pos()):
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     print("start button pressed")
-                    loreMusic.play()
+                    lore_music.play()
                     scene = "exposition"
                 else:
-                    startBtn.setImage("img/start_button-hover.png", (200, 120))
+                    start_button.setImage("img/start_button-hover.png", (150, 90))
             else:
-                startBtn.setImage("img/start_button.png", (200, 120))
+                start_button.setImage("img/start_button.png", (150, 90))
 
 
 
@@ -128,39 +132,38 @@ while running:
                 if event.key == pygame.K_SPACE:
                     print("space button pressed")
                     scene = "living-room"
-                    loreMusic.stop()
+                    lore_music.stop()
 
         elif scene == "living-room":
 
             # checks if bookshelf or page is clicked on
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if bookShelf.rect.collidepoint(pygame.mouse.get_pos()):
+                if book_shelf.rect.collidepoint(pygame.mouse.get_pos()):
                     print("book pressed")
-                    isBookOpened = True
+                    is_book_opened = True
                 elif bookpage.rect.collidepoint(pygame.mouse.get_pos()):
                     print("book scratched")
-                    isBookOpened = False
+                    is_book_opened = False
 
     if scene == "title":
-        title_text()
-        startBtn.draw(screen)
+        screen.blit(title_screen, (0, 0))
+        start_button.draw(screen)
     elif scene == "exposition":
         show_lore(loreY)
         loreY -= .3
     elif scene == "living-room":
 
-        background = pygame.image.load('img/living-room.png')
-        screen.blit(background, (0, 0))
-        bookShelf.draw(screen)
-        showInventory = True
+        set_background('img/living-room.png')
+        book_shelf.draw(screen)
+        show_inventory = True
 
         # displays book page
-        if isBookOpened:
-            bookShelf.pop_book(screen, bookpage)
+        if is_book_opened:
+            book_shelf.pop_book(screen, bookpage)
             if "book" not in inventory:
                 inventory.append("book")
 
-    if showInventory:
+    if show_inventory:
         draw_inventory()
         if len(inventory) > 0:
             render_inventory.render_inventory_bar(screen, inventory)

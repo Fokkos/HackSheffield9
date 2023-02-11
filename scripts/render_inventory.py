@@ -3,6 +3,7 @@ import constants
 
 screenX = constants.SCREEN_X
 screenY = constants.SCREEN_Y
+item_size = 75
 
 pygame.init()
 font_name = pygame.font.Font('freesansbold.ttf', 25)
@@ -15,7 +16,7 @@ item_height = screenY - (inventory_bar.get_height() / 2)
 class InventorySprite(pygame.sprite.Sprite):
     def __init__(self, name, description, img_link, x) -> None:
         super().__init__()
-        self.image = pygame.transform.scale(pygame.image.load(img_link), (50, 50))
+        self.image = pygame.transform.scale(pygame.image.load(img_link), (item_size, item_size))
         self.name = name
         self.description = description
         self.rect = self.image.get_rect()
@@ -51,7 +52,7 @@ def checkCollision(sprite, screen):
 
 # used to render each item in the players inventory
 def render_inventory_bar(screen, inventory):
-    x = 45
+    x = 60
     dx = 88  # rough spacing to fit all items, can do maths later ig
     for item in inventory:
         sprite = createSprite(item, x)
