@@ -38,6 +38,7 @@ pawX = 0
 pawY = 0
 
 catSound = mixer.Sound("sounds/miau.wav")
+loreMusic = mixer.Sound("sounds/space-odyssey.wav")
 
 # lore page assets
 lore = pygame.image.load("img/lorem ipsum.png")
@@ -143,6 +144,7 @@ while running:
             if startBtn.rect.collidepoint(pygame.mouse.get_pos()):
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     print("start button pressed")
+                    loreMusic.play()
                     scene = "exposition"
                 else:
                     startBtn.image = pygame.image.load("img/start_button-hover.png")
@@ -156,6 +158,7 @@ while running:
                 if event.key == pygame.K_SPACE:
                     print("space button pressed")
                     scene = "living-room"
+                    loreMusic.stop()
 
         elif scene == "living-room":
 
