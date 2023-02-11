@@ -21,7 +21,7 @@ pygame.init()
 screenX = constants.SCREEN_X
 screenY = constants.SCREEN_Y
 screen = pygame.display.set_mode((screenX, screenY))
-#pygame.mouse.set_cursor((8, 8), (0, 0), (0, 0, 0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0, 0, 0))  # make cursor invisible
+# pygame.mouse.set_cursor((8, 8), (0, 0), (0, 0, 0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0, 0, 0))  # make cursor invisible
 start = False
 show_inventory = False
 scene = "title"  # look into setting as a dictionary?
@@ -53,6 +53,16 @@ lore_music = mixer.Sound("sounds/space-odyssey.wav")
 lore = pygame.image.load("img/lore-screen/lorem ipsum.png")
 loreY = 75
 
+# living room assets
+state_bookshelf = "default"
+state_bookshelf_bottom = "default"
+state_armchair = "default"
+
+bookshelf = sprites.Bookshelf()
+book_page = sprites.BookPage()
+is_book_opened = False  # sets if book is clicked from the shelf
+
+
 # sets the background size and position taking inventory bar into account
 def set_background(img_link):
     screen.blit(pygame.transform.scale(pygame.image.load(img_link), (800, 500)), (0, 0))
@@ -69,11 +79,6 @@ def paw(x, y):
     screen.blit(paw_img, (x, y))
 
 
-def title_text():
-    text = font.render("kitty simulator >:3", True, (255, 255, 255))
-    screen.blit(text, (200, 200))
-
-
 def show_lore(y):
     screen.blit(lore, (0, y))
 
@@ -81,12 +86,7 @@ def show_lore(y):
 def draw_inventory():
     screen.blit(inventory_bar, (0, screenY - inventory_bar.get_height()))
 
-# bookshelf and bookpage objects
-book_shelf = sprites.Bookshelf()
-bookpage = sprites.BookPage()
 
-# sets if book is clicked from the shelf
-is_book_opened = False
 # Game Loop
 running = True
 while running:
@@ -106,6 +106,7 @@ while running:
             if event.key == pygame.K_SPACE:
                 start = True
         if event.type == pygame.MOUSEBUTTONDOWN:
+            print(pygame.mouse.get_pos())
             paw_img = pygame.image.load('img/player/paw_claw.png')
             meow_rng(5)
         elif event.type == pygame.MOUSEBUTTONUP:
@@ -123,8 +124,6 @@ while running:
             else:
                 start_button.setImage("img/title-screen/start_button.png", (150, 90))
 
-
-
         elif scene == "exposition":
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
@@ -135,13 +134,34 @@ while running:
         elif scene == "living-room":
 
             # checks if bookshelf or page is clicked on
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if book_shelf.rect.collidepoint(pygame.mouse.get_pos()):
-                    print("book pressed")
-                    is_book_opened = True
-                elif bookpage.rect.collidepoint(pygame.mouse.get_pos()):
-                    print("book scratched")
-                    is_book_opened = False
+            if state_bookshelf_bottom == "default":
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if pygame.Rect(77, 334, 279, 421).collidepoint(pygame.mouse.get_pos()):
+                        state_bookshelf_bottom = "knocked"
+                    else:
+                        state_bookshelf = "default"
+                    #if bookshelf.rect.collidepoint(pygame.mouse.get_pos()):
+                    #    is_book_opened = True
+                    #elif book_page.rect.collidepoint(pygame.mouse.get_pos()):
+                    #    is_book_opened = False
+                else:   #hover
+                    if pygame.Rect(77, 334, 279, 421).collidepoint(pygame.mouse.get_pos()):
+                        state_bookshelf = "init_light_bottom_shelf"
+                    else:
+                        state_bookshelf = "default"
+            else:
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    print("todo")
+                else:   #hover
+                    #if pygame.Rect(211, 329, 261, 373).collidepoint(pygame.mouse.get_pos()):
+                    #    state_bookshelf = "final_light_keypad"
+                    #else:
+                        state_bookshelf = "final_nolight"
+
+
+            print(state_bookshelf)
+            bookshelf.changeState(state_bookshelf)
+
 
     if scene == "title":
         screen.blit(title_screen, (0, 0))
@@ -152,12 +172,12 @@ while running:
     elif scene == "living-room":
 
         set_background('img/living-room/living-room.png')
-        book_shelf.draw(screen)
+        bookshelf.draw(screen)
         show_inventory = True
 
         # displays book page
         if is_book_opened:
-            book_shelf.pop_book(screen, bookpage)
+            bookshelf.pop_book(screen, book_page)
             if "book" not in inventory:
                 inventory.append("book")
 

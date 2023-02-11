@@ -6,6 +6,7 @@ screenY = constants.SCREEN_Y
 item_size = 75
 
 pygame.init()
+
 font_name = pygame.font.Font('freesansbold.ttf', 25)
 font_description = pygame.font.Font('freesansbold.ttf', 15)
 

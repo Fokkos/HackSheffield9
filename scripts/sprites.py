@@ -28,14 +28,25 @@ class StartButton(GameSprite):
 
 class Bookshelf(GameSprite):
     def __init__(self) -> None:
-        size = (400, 370)
-        pos = (340, 245)
-        createClass(self, "img/living-room/bookshelf.png", size, pos)
+        size = (250, 350)
+        pos = (185, 260)
+        createClass(self, "img/living-room/bookshelf_default.png", size, pos)
 
     def pop_book(self, screen, bookpage):
         bookpage.draw(screen)
 
+    # changes the state of the bookshelf
+    def changeState(self, state):
+        if state == "default":
+            self.setImage("img/living-room/bookshelf_default.png", (250, 350))
+        elif state == "init_light_bottom_shelf":
+            self.setImage("img/living-room/bookshelf_initial_light_bottom_shelf.png", (250, 350))
+        elif state == "final_light_keypad":
+            self.setImage("img/living-room/bookshelf_final_light_keypad.png", (250, 350))
+        elif state == "final_nolight":
+            self.setImage("img/living-room/bookshelf_final_nolight.png", (250, 350))
+
 
 class BookPage(GameSprite):
     def __init__(self) -> None:
-        createClass(self, "img/living-room/bookpage_tutorial.png", (300, 300), (460, 220))
+        createClass(self, "img/living-room/bookpage_tutorial.png", (50, 50), (600, 220))
