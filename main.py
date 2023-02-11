@@ -277,18 +277,21 @@ while running:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if pygame.Rect(150, 100, 500, 300).collidepoint(pygame.mouse.get_pos()):
                         if pygame.Rect(250, 175, 300, 175).collidepoint(pygame.mouse.get_pos()):
-                            chaos_bar.hit(1)
+                            
                             match(state_salmon):
                                 case "default":
                                     state_salmon = "one_bite"
+                                    chaos_bar.hit(1)
                                     chomp_sound.play()
                                     break
                                 case "one_bite":
                                     state_salmon = "two_bites"
+                                    chaos_bar.hit(1)
                                     chomp_sound.play()
                                     break
                                 case "two_bites":
                                     state_salmon = "finish"
+                                    chaos_bar.hit(1)
                                     chomp_sound.play()
                                     # chaos_bar.hit(3)
                                     inventory.append("salmon")

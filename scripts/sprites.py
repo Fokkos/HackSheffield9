@@ -170,7 +170,20 @@ class Chaosbar():
         pygame.draw.rect(screen, (0,128,0), (600, 10, (15 * (10 - self.clean_house)), 30))
 
     def damageReport(self):
-        return str(constants.HOUSE_HEALTH - self.clean_house)
+        damage = (constants.HOUSE_HEALTH - self.clean_house)
+        msg = ""
+        if damage == 0:
+            msg = "Mittens retired from a life of crime"
+        
+        elif damage < constants.HOUSE_HEALTH / 3:
+            msg = "Minor damage done. Perhaps Mittens has grown fond of his new place"
+        
+        elif damage == constants.HOUSE_HEALTH:
+            msg = "Master would be proud"
+        else: 
+            msg = "Enough damage has been done"
+        return msg
+
 
 
 class Endings():
@@ -183,6 +196,6 @@ class Endings():
     def draw(self,msg,screen):
         font = pygame.font.Font('freesansbold.ttf', 32)
 
-        summary = "Game over. You have "+ msg + " damage"
+        summary = "Game over. "+ msg 
         text = font.render(summary, True, (255, 255, 255))
         screen.blit(text, (200, 200))
