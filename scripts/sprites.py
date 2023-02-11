@@ -62,7 +62,19 @@ class BlueBook(GameSprite):
         createClass(self, "img/living-room/blue_book.png", size, pos)
 
     def changeState(self, state):
-        if state == "default":
-            self.setImage("img/living-room/bookshelf_default.png", (600, 400))
+        if state == "visible":
+            self.setImage("img/living-room/blue_book.png", (600, 400))
         elif state == "eaten":
             self.setImage("img/living-room/blue_book_chewed.png", (600, 400))
+
+class SageBook(GameSprite):
+    def __init__(self) -> None:
+        size = (600, 400)
+        pos = (400, 250)
+        createClass(self, "img/living-room/sage_book.png", size, pos)
+
+    def changeState(self, state):
+        if state == "visible":
+            self.setImage("img/living-room/sage_book.png", (600, 400))
+        elif state == "torn":
+            self.setImage("img/living-room/sage_book_torn.png", (600, 400))
