@@ -135,6 +135,23 @@ class Salmon(GameSprite):
         elif state == "finish":
             self.setImage("img/kitchen/salmon_final.png", (500, 300))
 
+class Sink(GameSprite):
+    def __init__(self) -> None:
+        size = (280, 260)
+        pos = (445, 305)
+        createClass(self, "img/kitchen/sink.png", size, pos)
+
+    def changeState(self, state):
+        if state == "default":
+            self.setImage("img/kitchen/sink.png", (280, 260))
+        elif state == "tap_light":
+            self.setImage("img/kitchen/sink_tap_light.png", (280, 260))
+        elif state == "default_tap_on":
+            self.setImage("img/kitchen/sink_on.png", (280, 260))
+        elif state == "sink_door_light":
+            self.setImage("img/kitchen/sink_on.png", (280, 260))
+        elif state == "sink_door_light":
+            self.setImage("img/kitchen/sink_on.png", (280, 260))
 
 class Chaosbar():
 

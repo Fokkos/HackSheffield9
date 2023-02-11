@@ -86,13 +86,16 @@ living_room_right_door = sprites.RightDoor()
 state_fridge = "default"
 state_salmon = "default"
 state_salmon_visible = False
+state_sink = "default"
+state_sink_tap = False
 state_oven = "default"
 state_plant_pot = "default"
-state_sink = "default"
 
 fridge = sprites.Fridge()
 salmon_minigame = sprites.Salmon()
+sink = sprites.Sink()
 
+# chaos meter
 chaos_bar = sprites.Chaosbar(10)
 
 # ending assets
@@ -270,9 +273,10 @@ while running:
             # fridge logic
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.Rect(580, 130, 145, 295).collidepoint(pygame.mouse.get_pos()):
+                    state_salmon_visible = True
                     door_sound.play()
                     print("fridge clicked")
-                    state_salmon_visible = True
+
             else:  # hover
                 if pygame.Rect(580, 130, 145, 295).collidepoint(pygame.mouse.get_pos()):
                     state_fridge = "highlighted"
@@ -285,7 +289,7 @@ while running:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if pygame.Rect(150, 100, 500, 300).collidepoint(pygame.mouse.get_pos()):
                         if pygame.Rect(250, 175, 300, 175).collidepoint(pygame.mouse.get_pos()):
-                            match(state_salmon):
+                            match state_salmon:
                                 case "default":
                                     state_salmon = "one_bite"
                                     chomp_sound.play()
@@ -305,6 +309,30 @@ while running:
                         state_salmon_visible = False
             salmon_minigame.changeState(state_salmon)
 
+            # sink logic
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.Rect(430, 165, 100, 80).collidepoint(pygame.mouse.get_pos()) and not state_sink_tap:
+                    # TODO: tap noise
+                    print("sink on!")
+                    state_sink_tap = True
+                elif pygame.Rect(440, 300, 140, 120).collidepoint(pygame.mouse.get_pos()):
+                    print("cupboard clicked")
+
+            else:  # hover
+                if pygame.Rect(430, 165, 100, 80).collidepoint(pygame.mouse.get_pos()):
+                    if not state_sink_tap:
+                        state_sink = "tap_light"
+                elif pygame.Rect(440, 300, 140, 120).collidepoint(pygame.mouse.get_pos()):
+                    if state_sink_tap:
+                        state_sink = "sink_on_door_light"
+                    else:
+                        state_sink = "sink_door_light"
+                else:
+                    if state_sink_tap:
+                        state_sink = "default_tap_on"
+                    else:
+                        state_sink = "default"
+            sink.changeState(state_sink)
 
 
 
@@ -340,6 +368,7 @@ while running:
     elif scene == "kitchen":
         set_background('img/kitchen/kitchen.png')
         fridge.draw(screen)
+        sink.draw(screen)
 
         if state_salmon_visible:
             salmon_minigame.draw(screen)
