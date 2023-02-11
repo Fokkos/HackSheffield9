@@ -1,5 +1,6 @@
 import pygame
 import random
+import time
 from pygame import mixer
 
 from scripts import render_inventory, sprites
@@ -43,6 +44,8 @@ pawX = 0
 pawY = 0
 
 cat_sound = mixer.Sound("sounds/miau.wav")
+tear_sound = mixer.Sound("sounds/tear.wav")
+chomp_sound = mixer.Sound("sounds/chomp.wav")
 
 # title screen assets
 title_screen = pygame.image.load("img/title-screen/title_screen.png")
@@ -57,10 +60,10 @@ loreY = 75
 state_bookshelf = "default"
 state_bookshelf_bottom = "default"
 state_armchair = "default"
+state_blue_book = "invisible"
 
 bookshelf = sprites.Bookshelf()
-book_page = sprites.BookPage()
-is_book_opened = False  # sets if book is clicked from the shelf
+blue_book = sprites.BlueBook()
 
 
 # sets the background size and position taking inventory bar into account
@@ -133,6 +136,15 @@ while running:
 
         elif scene == "living-room":
 
+            if state_blue_book == "visible":
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if pygame.Rect(100, 50, 600, 400).collidepoint(pygame.mouse.get_pos()):
+                        state_blue_book = "eaten"
+                        chomp_sound.play()
+            elif state_blue_book == "eaten":
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if not pygame.Rect(100, 50, 600, 400).collidepoint(pygame.mouse.get_pos()):
+                        state_blue_book = "invisible-eaten"
             # checks if bookshelf or page is clicked on
             if state_bookshelf_bottom == "default":
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -145,24 +157,39 @@ while running:
                     #elif book_page.rect.collidepoint(pygame.mouse.get_pos()):
                     #    is_book_opened = False
                 else:   #hover
-                    if pygame.Rect(77, 334, 200, 90).collidepoint(pygame.mouse.get_pos()):
+                    if pygame.Rect(73, 341, 200, 65).collidepoint(pygame.mouse.get_pos()):
                         state_bookshelf = "init_light_bottom_shelf"
-                    elif pygame.Rect(141, 181, 40, 50).collidepoint(pygame.mouse.get_pos()):
+                    elif pygame.Rect(138, 193, 35, 60).collidepoint(pygame.mouse.get_pos()):
                         state_bookshelf = "init_light_dark_blue"
-                    elif pygame.Rect(190, 260, 45, 65).collidepoint(pygame.mouse.get_pos()):
+                    elif pygame.Rect(187, 265, 40, 75).collidepoint(pygame.mouse.get_pos()):
                         state_bookshelf = "init_light_sage"
                     else:
                         state_bookshelf = "default"
             else:
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    print("todo")
+                    if pygame.Rect(208, 344, 50, 50).collidepoint(pygame.mouse.get_pos()):
+                        print("implement keypad")
+                    elif pygame.Rect(138, 193, 35, 60).collidepoint(pygame.mouse.get_pos()):
+                        if state_blue_book == "invisible":
+                            state_blue_book = "visible"
+                        else:
+                            state_blue_book = "eaten"
+                    elif pygame.Rect(187, 265, 40, 75).collidepoint(pygame.mouse.get_pos()):
+                        print("implement sage book")
                 else:   #hover
-                    #if pygame.Rect(211, 329, 261, 373).collidepoint(pygame.mouse.get_pos()):
-                    #    state_bookshelf = "final_light_keypad"
-                    #else:
+                    if pygame.Rect(208, 344, 50, 50).collidepoint(pygame.mouse.get_pos()):
+                        state_bookshelf = "final_light_keypad"
+                    elif pygame.Rect(138, 193, 35, 60).collidepoint(pygame.mouse.get_pos()):
+                        state_bookshelf = "final_light_dark_blue"
+                    elif pygame.Rect(187, 265, 40, 75).collidepoint(pygame.mouse.get_pos()):
+                        state_bookshelf = "final_light_sage"
+                    else:
                         state_bookshelf = "final_nolight"
 
             bookshelf.changeState(state_bookshelf)
+
+
+
 
 
     if scene == "title":
@@ -177,11 +204,10 @@ while running:
         bookshelf.draw(screen)
         show_inventory = True
 
-        # displays book page
-        if is_book_opened:
-            bookshelf.pop_book(screen, book_page)
-            if "book" not in inventory:
-                inventory.append("book")
+        if state_blue_book == "visible" or state_blue_book == "eaten":
+            blue_book.draw(screen)
+        if state_blue_book == "eaten":
+            blue_book.changeState("eaten")
 
     if show_inventory:
         draw_inventory()

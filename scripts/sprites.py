@@ -29,7 +29,7 @@ class StartButton(GameSprite):
 class Bookshelf(GameSprite):
     def __init__(self) -> None:
         size = (250, 350)
-        pos = (185, 260)
+        pos = (185, 282)
         createClass(self, "img/living-room/bookshelf_default.png", size, pos)
 
     def pop_book(self, screen, bookpage):
@@ -49,8 +49,20 @@ class Bookshelf(GameSprite):
             self.setImage("img/living-room/bookshelf_final_light_keypad.png", (250, 350))
         elif state == "final_nolight":
             self.setImage("img/living-room/bookshelf_final_nolight.png", (250, 350))
+        elif state == "final_light_dark_blue":
+            self.setImage("img/living-room/bookshelf_final_light_dark_blue.png", (250, 350))
+        elif state == "final_light_sage":
+            self.setImage("img/living-room/bookshelf_final_light_sage.png", (250, 350))
 
 
-class BookPage(GameSprite):
+class BlueBook(GameSprite):
     def __init__(self) -> None:
-        createClass(self, "img/living-room/bookpage_tutorial.png", (50, 50), (600, 220))
+        size = (600, 400)
+        pos = (400, 250)
+        createClass(self, "img/living-room/blue_book.png", size, pos)
+
+    def changeState(self, state):
+        if state == "default":
+            self.setImage("img/living-room/bookshelf_default.png", (600, 400))
+        elif state == "eaten":
+            self.setImage("img/living-room/blue_book_chewed.png", (600, 400))
