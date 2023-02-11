@@ -90,9 +90,9 @@ class Bookshelf(pygame.sprite.Sprite):
 
     def __init__(self) -> None:
         super().__init__()
-        self.image = pygame.image.load("img/bookshelf.png")
+        self.image = pygame.transform.scale(pygame.image.load("img/bookshelf.png"), (270, 240))
         self.rect = self.image.get_rect()
-        self.rect.center = (160, 220)
+        self.rect.center = (275, 300)
 
     def pop_book(self, screen, bookpage):
         bookpage.draw(screen)
