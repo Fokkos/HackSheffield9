@@ -7,8 +7,6 @@ import constants
 
 # TODO:
 # name. the. cat.
-# come up with final title of game
-# create better looking title screen
 # write the lore at the start of the game
 # draw sprites and environments
 # work out interactions
