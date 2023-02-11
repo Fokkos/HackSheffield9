@@ -36,23 +36,23 @@ icon = pygame.image.load('img/icon.jpg')
 pygame.display.set_icon(icon)
 
 # inventory
-inventory_bar = pygame.image.load("img/inventory.png")
+inventory_bar = pygame.image.load("img/inventory/inventory.png")
 inventory = []
 
 # paw initial values
-paw_img = pygame.image.load('img/paw.png')
+paw_img = pygame.image.load('img/player/Paw.png')
 pawX = 0
 pawY = 0
 
 cat_sound = mixer.Sound("sounds/miau.wav")
 
 # title screen assets
-title_screen = pygame.image.load("img/title_screen.png")
+title_screen = pygame.image.load("img/title-screen/title_screen.png")
 start_button = sprites.StartButton()
 
 # lore page assets
 lore_music = mixer.Sound("sounds/space-odyssey.wav")
-lore = pygame.image.load("img/lorem ipsum.png")
+lore = pygame.image.load("img/lore-screen/lorem ipsum.png")
 loreY = 75
 
 # sets the background size and position taking inventory bar into account
@@ -108,10 +108,10 @@ while running:
             if event.key == pygame.K_SPACE:
                 start = True
         if event.type == pygame.MOUSEBUTTONDOWN:
-            paw_img = pygame.image.load('img/paw_claw.png')
+            paw_img = pygame.image.load('img/player/paw_claw.png')
             meow_rng(5)
         elif event.type == pygame.MOUSEBUTTONUP:
-            paw_img = pygame.image.load('img/paw.png')
+            paw_img = pygame.image.load('img/player/Paw.png')
             cat_sound.stop()
 
         if scene == "title":
@@ -121,9 +121,9 @@ while running:
                     lore_music.play()
                     scene = "exposition"
                 else:
-                    start_button.setImage("img/start_button-hover.png", (150, 90))
+                    start_button.setImage("img/title-screen/start_button-hover.png", (150, 90))
             else:
-                start_button.setImage("img/start_button.png", (150, 90))
+                start_button.setImage("img/title-screen/start_button.png", (150, 90))
 
 
 
@@ -153,7 +153,7 @@ while running:
         loreY -= .3
     elif scene == "living-room":
 
-        set_background('img/living-room.png')
+        set_background('img/living-room/living-room.png')
         book_shelf.draw(screen)
         show_inventory = True
 

@@ -9,7 +9,7 @@ pygame.init()
 font_name = pygame.font.Font('freesansbold.ttf', 25)
 font_description = pygame.font.Font('freesansbold.ttf', 15)
 
-inventory_bar = pygame.image.load("img/inventory.png")
+inventory_bar = pygame.image.load("img/inventory/inventory.png")
 item_height = screenY - (inventory_bar.get_height() / 2)
 
 
@@ -32,7 +32,7 @@ def createSprite(name, x):
         case "book":    # do all sprites in this format! :)
             sprite = InventorySprite("book",
                                      "mysterious book found on shelf",
-                                     "img/book.png",
+                                     "img/inventory/book.png",
                                      x)
             return sprite
 
