@@ -142,6 +142,8 @@ def regular_ending():
     summary = subtitle_font.render(chaos_bar.damageReport(), True, (255, 255, 255))
     screen.blit(summary, (0, 525))
 
+def true_ending():
+    print("placeholder")
 
 def check_for_true_ending():
     if "candle" in inventory and "lighter" in inventory and "blood" in inventory and "salmon" in inventory:
@@ -212,7 +214,7 @@ while running:
         if true_ending_flag:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.Rect(615, 500, 100, 85).collidepoint(pygame.mouse.get_pos()):
-                    print("true ending trigger")
+                    true_ending_start_flag = True
             else:
                 if pygame.Rect(615, 500, 100, 85).collidepoint(pygame.mouse.get_pos()):
                     state_pentagram = "light"
@@ -651,6 +653,10 @@ while running:
 
     if true_ending_flag:
         pentagram.draw(screen)
+
+    if true_ending_start_flag:
+        show_inventory = False
+        true_ending()
 
     paw(pawX, pawY)
 
