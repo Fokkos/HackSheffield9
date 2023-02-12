@@ -161,7 +161,7 @@ def show_lore(y):
 def draw_inventory():
     screen.blit(inventory_bar, (0, screenY - inventory_bar.get_height()))
 
-start_ticks=pygame.time.get_ticks() 
+start_ticks = 0
 # Game Loop
 
 running = True
@@ -211,6 +211,7 @@ while running:
         elif scene == "exposition":
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
+                    start_ticks = pygame.time.get_ticks()
                     print("space button pressed")
                     scene = "living_room"
                     lore_music.stop()

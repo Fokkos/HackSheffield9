@@ -1,3 +1,5 @@
+import math
+
 import pygame
 import constants
 
@@ -334,9 +336,23 @@ class Countdown():
     
     def update(self, seconds, screen):
         font = pygame.font.Font('freesansbold.ttf', 32)
-        summary = "Remaining time. " + str(constants.MAX_TIME - seconds)
-        text = font.render(summary, True, (255, 0, 255))
-        screen.blit(text, (404, 102))
+        seconds_left = int(constants.MAX_TIME - seconds)
+        minutes_left = math.floor(seconds_left / 60)
+        remainder_seconds_left = seconds_left - (minutes_left * 60)
+
+        time_string = ""
+        border_width = 0
+        if minutes_left > 0:
+            time_string = str(minutes_left) + "m " + str(remainder_seconds_left) + "s"
+            border_width = 400
+        else:
+            time_string = str(seconds_left) + "s"
+            border_width = 350
+
+        summary = "Remaining time: " + time_string
+        text = font.render(summary, True, (255, 255, 255))
+        pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(15, 15, border_width, 40))
+        screen.blit(text, (20, 20))
 
     
 class Endings():
