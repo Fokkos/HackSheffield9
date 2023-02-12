@@ -57,7 +57,8 @@ start_button = sprites.StartButton()
 
 # lore page assets
 lore_music = mixer.Sound("sounds/space-odyssey.wav")
-lore = pygame.image.load("img/lore-screen/lorem ipsum.png")
+lore = pygame.image.load("img/lore-screen/lore.png")
+skip = pygame.image.load("img/lore-screen/skip.png")
 loreY = 75
 
 # living room assets
@@ -126,6 +127,7 @@ def paw(x, y):
 
 def show_lore(y):
     screen.blit(lore, (0, y))
+    screen.blit(skip, (0, 520))
 
 
 def draw_inventory():
