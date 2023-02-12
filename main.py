@@ -564,14 +564,14 @@ while running:
 
             # shelf logic
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if pygame.Rect(425, 210, 100, 100).collidepoint(pygame.mouse.get_pos()) and not state_candle_get:
+                if pygame.Rect(455, 145, 110, 125).collidepoint(pygame.mouse.get_pos()) and not state_candle_get:
                     thud_sound.play()
                     chaos_bar.hit(1)
                     state_shelf = "fall"
                     inventory.append("candle")
                     state_candle_get = True
             else:
-                if pygame.Rect(425, 210, 100, 100).collidepoint(pygame.mouse.get_pos()) and not state_shelf == "fall":
+                if pygame.Rect(455, 145, 110, 125).collidepoint(pygame.mouse.get_pos()) and not state_shelf == "fall":
                     state_shelf = "light"
                 elif not state_shelf == "fall":
                     state_shelf = "default"
