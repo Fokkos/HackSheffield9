@@ -8,7 +8,7 @@ Welcome to Villain Cat Simulator, a point-and-click adventure game where you pla
 ## Gameplay
 In Villain Cat Simulator, you explore various environments and interact with objects and characters in order to cause chaos and disruption. The game is divided into  3 scenes, each with its own challenges and objectives. You have a limited amount of time to cause as much destruction as possible, so it's up to you to be creative and think outside the box.
 As you explore the Hero’s home, you'll encounter a variety of obstacles that will try to stop you. You'll need to use your wit and cunning to overcome these challenges and reach your ultimate goal of causing as much chaos as possible.
-# Features
+## Features
 * Play as Mittens, a mischievous cat on a mission to cause chaos
 * Explore various environments and interact with objects and characters
 * Complete challenges and objectives in each level
