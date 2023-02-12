@@ -180,6 +180,7 @@ while running:
                         state_blue_book = "eaten"
                         chaos_bar.hit(1)
                         chomp_sound.play()
+                        inventory.append("blue_scrap")
             elif state_blue_book == "eaten":
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if not pygame.Rect(100, 50, 600, 400).collidepoint(pygame.mouse.get_pos()):
@@ -191,6 +192,7 @@ while running:
                         state_sage_book = "torn"
                         chaos_bar.hit(2)
                         tear_sound.play()
+                        inventory.append("sage_scrap")
             elif state_sage_book == "torn":
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if not pygame.Rect(100, 50, 600, 400).collidepoint(pygame.mouse.get_pos()):

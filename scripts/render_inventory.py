@@ -48,6 +48,18 @@ def createSprite(name, x):
                                      "img/inventory/lighter.png",
                                      x)
             return sprite
+        case "blue_scrap":
+            sprite = InventorySprite("blue scrap",
+                                     "37... what could it mean? :O",
+                                     "img/inventory/blue_scrap.png",
+                                     x)
+            return sprite
+        case "sage_scrap":
+            sprite = InventorySprite("sage scrap",
+                                     "110... sounds familiar...? :>",
+                                     "img/inventory/sage_scrap.png",
+                                     x)
+            return sprite
 
 
 # checks if mouse is hovering over sprite, if so, show description and name
