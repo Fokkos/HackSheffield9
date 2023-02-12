@@ -311,6 +311,19 @@ class Chaosbar():
         return msg
 
 
+class Countdown():
+
+    def __init__(self) -> None:
+        print("ye")
+
+    
+    def update(self, seconds, screen):
+        font = pygame.font.Font('freesansbold.ttf', 32)
+        summary = "Remaining time. " + str(seconds)
+        text = font.render(summary, True, (255, 0, 255))
+        screen.blit(text, (404, 102))
+
+    
 class Endings():
 
     def __init__(self) -> None:
@@ -321,4 +334,4 @@ class Endings():
 
         summary = "Game over. " + msg
         text = font.render(summary, True, (255, 255, 255))
-        screen.blit(text, (200, 200))
+        screen.blit(text, (100, 200))

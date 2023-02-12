@@ -116,6 +116,8 @@ secret_lab_door = sprites.SecretDoorRight()
 lab_table = sprites.LabTable()
 blood_minigame = sprites.BloodMinigame()
 
+timerCount = sprites.Countdown()
+
 # chaos meter
 chaos_bar = sprites.Chaosbar(constants.HOUSE_HEALTH)
 
@@ -147,7 +149,7 @@ def show_lore(y):
 def draw_inventory():
     screen.blit(inventory_bar, (0, screenY - inventory_bar.get_height()))
 
-
+start_ticks=pygame.time.get_ticks() 
 # Game Loop
 
 running = True
@@ -156,10 +158,16 @@ while running:
     # RGB = Red, Green, Blue
     screen.fill((0, 0, 0))
     # Background Image
+    
+    
+    
     for event in pygame.event.get():
 
         if event.type == pygame.QUIT:
             running = False
+        
+        
+            
         if event.type == pygame.MOUSEMOTION:
             mousePosX, mousePosY = pygame.mouse.get_pos()
             pawX = mousePosX - (paw_img.get_width() / 2)
@@ -518,63 +526,72 @@ while running:
     elif scene == "exposition":
         show_lore(loreY)
         loreY -= .3
-    elif scene == "living_room":
 
-        set_background('img/living_room/living_room.png')
-        bookshelf.draw(screen)
-        armchair.draw(screen)
-        living_room_right_door.draw(screen)
-        chaos_bar.default_bar(screen)
-        # pygame.draw.rect(screen, (255,0,0), (600, 10, 150, 30))
-        show_inventory = True
+    else:
+        seconds_remaining = (pygame.time.get_ticks()-start_ticks)/1000 
+        timerCount.update(seconds_remaining, screen)
+        # print(seconds_remaining)
 
-        if state_keypad_visible:
-            keypad.draw(screen)
+        if seconds_remaining > 10: 
+            scene = "ending"
 
-        if state_secret:
-            secret_door.draw(screen)
+        if scene == "living_room":
 
-        chaos_bar.update(screen)
+            set_background('img/living_room/living_room.png')
+            bookshelf.draw(screen)
+            armchair.draw(screen)
+            living_room_right_door.draw(screen)
+            chaos_bar.default_bar(screen)
+            # pygame.draw.rect(screen, (255,0,0), (600, 10, 150, 30))
+            show_inventory = True
 
-        if state_blue_book == "visible" or state_blue_book == "eaten":
-            blue_book.draw(screen)
-        if state_blue_book == "eaten":
-            blue_book.changeState("eaten")
+            if state_keypad_visible:
+                keypad.draw(screen)
 
-        if state_sage_book == "visible" or state_sage_book == "torn":
-            sage_book.draw(screen)
-        if state_sage_book == "torn":
-            sage_book.changeState("torn")
+            if state_secret:
+                secret_door.draw(screen)
 
-    elif scene == "kitchen":
-        set_background('img/kitchen/kitchen.png')
-        fridge.draw(screen)
-        sink.draw(screen)
-        oven.draw(screen)
-        kitchen_left_door.draw(screen)
-        flower.draw(screen)
+            chaos_bar.update(screen)
 
-        if state_salmon_visible:
-            salmon_minigame.draw(screen)
-        elif state_cabinet_visible:
-            cabinet.draw(screen)
+            if state_blue_book == "visible" or state_blue_book == "eaten":
+                blue_book.draw(screen)
+            if state_blue_book == "eaten":
+                blue_book.changeState("eaten")
 
-        chaos_bar.update(screen)
+            if state_sage_book == "visible" or state_sage_book == "torn":
+                sage_book.draw(screen)
+            if state_sage_book == "torn":
+                sage_book.changeState("torn")
 
-    elif scene == "secret_lab":
-        set_background('img/secret_lab/secret_lab.png')
+        elif scene == "kitchen":
+            set_background('img/kitchen/kitchen.png')
+            fridge.draw(screen)
+            sink.draw(screen)
+            oven.draw(screen)
+            kitchen_left_door.draw(screen)
+            flower.draw(screen)
 
-        secret_lab_door.draw(screen)
-        lab_table.draw(screen)
+            if state_salmon_visible:
+                salmon_minigame.draw(screen)
+            elif state_cabinet_visible:
+                cabinet.draw(screen)
 
-        if state_blood_minigame_visible:
-            blood_minigame.draw(screen)
+            chaos_bar.update(screen)
 
-    elif scene == "ending":
-        # TODO: Change image and update message to display progress
-        set_background('img/living_room/living_room.png')
+        elif scene == "secret_lab":
+            set_background('img/secret_lab/secret_lab.png')
 
-        ending1.draw(chaos_bar.damageReport(), screen)
+            secret_lab_door.draw(screen)
+            lab_table.draw(screen)
+
+            if state_blood_minigame_visible:
+                blood_minigame.draw(screen)
+
+        elif scene == "ending":
+            # TODO: Change image and update message to display progress
+            set_background('img/living_room/living_room.png')
+
+            ending1.draw(chaos_bar.damageReport(), screen)
 
     if show_inventory:
         draw_inventory()
