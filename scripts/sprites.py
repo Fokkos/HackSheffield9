@@ -366,17 +366,16 @@ class Countdown():
         pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(15, 15, border_width, 40))
         screen.blit(text, (20, 20))
 
-
-
-
-class Endings():
-
+class Ending(GameSprite):
     def __init__(self) -> None:
-        print("ye")
+        size = (800, 600)
+        pos = (400, 300)
+        createClass(self, "img/endings/special_ending.png", size, pos)
 
-    def draw(self, msg, screen):
-        font = pygame.font.Font('freesansbold.ttf', 32)
+    def changeState(self, state):
+        if state == "default":
+            self.setImage("img/endings/special_ending.png", (800, 600))
+        elif state == "second":
+            self.setImage("img/endings/special_ending_2.png", (800, 600))
 
-        summary = "Game over. " + msg
-        text = font.render(summary, True, (255, 255, 255))
-        screen.blit(text, (100, 200))
+

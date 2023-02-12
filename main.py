@@ -5,13 +5,6 @@ from pygame import mixer
 from scripts import render_inventory, sprites
 import constants
 
-# TODO:
-# add door to secret room
-# create secret room
-#
-# come up with "win conditions"
-# make endings depending on what player does
-
 # initialise pygame
 pygame.init()
 
@@ -117,22 +110,22 @@ lab_table = sprites.LabTable()
 blood_minigame = sprites.BloodMinigame()
 shelf = sprites.Shelf()
 
-
-special_ending_flag = False
-
 timerCount = sprites.Countdown()
 
 # chaos meter
 chaos_bar = sprites.Chaosbar(constants.HOUSE_HEALTH)
 
-
 # ending assets
 regular_ending_flag = False
 true_ending_flag = False    # when the pentagram appears
 true_ending_start_flag = False  # when you click the pentagram
+true_ending_start_flag_2 = False
 state_pentagram = "default"
+state_true_ending = "default"
 
 pentagram = sprites.Pentagram()
+true_ending = sprites.Ending()
+
 
 def regular_ending():
     screen.blit(pygame.image.load("img/endings/regular_ending.png"), (0, 0))
@@ -144,7 +137,6 @@ def regular_ending():
     screen.blit(summary, (0, 525))
 
 
-
 def check_for_true_ending():
     if "candle" in inventory and "lighter" in inventory and "blood" in inventory and "salmon" in inventory:
         return True
@@ -152,10 +144,6 @@ def check_for_true_ending():
         return False
 
 
-def true_ending():
-    screen.blit(pygame.image.load("img/endings/special_ending.png"), (0, 0))
-    score_text = font.render("Unlocked special ending. ", True, (255, 255, 255))
-    screen.blit(score_text, (0, 525))
 # sets the background size and position taking inventory bar into account
 def set_background(img_link):
     screen.blit(pygame.transform.scale(pygame.image.load(img_link), (800, 500)), (0, 0))
@@ -199,8 +187,7 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 running = False
-        
-            
+
         if event.type == pygame.MOUSEMOTION:
             mousePosX, mousePosY = pygame.mouse.get_pos()
             pawX = mousePosX - (paw_img.get_width() / 2)
@@ -576,6 +563,10 @@ while running:
                 elif not state_shelf == "fall":
                     state_shelf = "default"
             shelf.changeState(state_shelf)
+        if true_ending_start_flag_2:
+            if event.type == pygame.MOUSEBUTTONDOWN and state_true_ending == "default":
+                state_true_ending = "second"
+        true_ending.changeState(state_true_ending)
 
     if scene == "title":
         screen.blit(title_screen, (0, 0))
@@ -586,8 +577,6 @@ while running:
 
     else:
         seconds_remaining = (pygame.time.get_ticks() - start_ticks) / 1000
-
-        # print(seconds_remaining)
 
         if seconds_remaining > constants.MAX_TIME:
             regular_ending_flag = True
@@ -661,18 +650,13 @@ while running:
 
     true_ending_flag = check_for_true_ending()
 
-
     if true_ending_flag:
         pentagram.draw(screen)
 
     if true_ending_start_flag:
-        show_inventory = False
-        true_ending()
+        true_ending.draw(screen)
+        true_ending_start_flag_2 = True
 
-
-    
     paw(pawX, pawY)
-
-
 
     pygame.display.update()
