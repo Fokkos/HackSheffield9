@@ -1,6 +1,6 @@
 SCREEN_X = 800
 SCREEN_Y = 600
 HOUSE_HEALTH = 14
-MAX_TIME = 300
+MAX_TIME = 300  # in seconds
 
 
