@@ -557,7 +557,7 @@ while running:
         # print(seconds_remaining)
 
         if seconds_remaining > 10: 
-            scene = "ending"
+            regular_ending_flag = True
 
         if scene == "living_room":
 
