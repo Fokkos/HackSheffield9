@@ -334,7 +334,7 @@ class Countdown():
     
     def update(self, seconds, screen):
         font = pygame.font.Font('freesansbold.ttf', 32)
-        summary = "Remaining time. " + str(seconds)
+        summary = "Remaining time. " + str(constants.MAX_TIME - seconds)
         text = font.render(summary, True, (255, 0, 255))
         screen.blit(text, (404, 102))
 

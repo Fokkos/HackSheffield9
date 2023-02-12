@@ -553,10 +553,10 @@ while running:
 
     else:
         seconds_remaining = (pygame.time.get_ticks()-start_ticks)/1000 
-        timerCount.update(seconds_remaining, screen)
+        
         # print(seconds_remaining)
 
-        if seconds_remaining > 10: 
+        if seconds_remaining > constants.MAX_TIME: 
             regular_ending_flag = True
 
         if scene == "living_room":
@@ -576,6 +576,7 @@ while running:
                 secret_door.draw(screen)
 
             chaos_bar.update(screen)
+            timerCount.update(seconds_remaining, screen)
 
             if state_blue_book == "visible" or state_blue_book == "eaten":
                 blue_book.draw(screen)
@@ -601,6 +602,7 @@ while running:
                 cabinet.draw(screen)
 
             chaos_bar.update(screen)
+            timerCount.update(seconds_remaining, screen)
 
         elif scene == "secret_lab":
             set_background('img/secret_lab/secret_lab.png')
@@ -611,6 +613,7 @@ while running:
 
             if state_blood_minigame_visible:
                 blood_minigame.draw(screen)
+            timerCount.update(seconds_remaining, screen)
 
     if show_inventory:
         draw_inventory()
