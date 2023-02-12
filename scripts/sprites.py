@@ -294,6 +294,18 @@ class BloodMinigame(GameSprite):
         elif state == "finish":
             self.setImage("img/secret_lab/blood_minigame_finish.png", (500, 300))
 
+class Pentagram(GameSprite):
+    def __init__(self) -> None:
+        size = (75, 75)
+        pos = (660, 535)
+        createClass(self, "img/endings/pentagram.png", size, pos)
+
+    def changeState(self, state):
+        if state == "default":
+            self.setImage("img/endings/pentagram.png", (75, 75))
+        elif state == "light":
+            self.setImage("img/endings/pentagram_light.png", (75, 75))
+
 class Chaosbar():
 
     def __init__(self, clean_house) -> None:
@@ -354,7 +366,9 @@ class Countdown():
         pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(15, 15, border_width, 40))
         screen.blit(text, (20, 20))
 
-    
+
+
+
 class Endings():
 
     def __init__(self) -> None:
