@@ -155,7 +155,7 @@ def check_for_true_ending():
 def true_ending():
     screen.blit(pygame.image.load("img/endings/special_ending.png"), (0, 0))
     score_text = font.render("Unlocked special ending. ", True, (255, 255, 255))
-    screen.blit(score_text, (50, 100))
+    screen.blit(score_text, (0, 525))
 # sets the background size and position taking inventory bar into account
 def set_background(img_link):
     screen.blit(pygame.transform.scale(pygame.image.load(img_link), (800, 500)), (0, 0))
@@ -660,7 +660,7 @@ while running:
         regular_ending()
 
     true_ending_flag = check_for_true_ending()
-    
+
 
     if true_ending_flag:
         pentagram.draw(screen)
