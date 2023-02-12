@@ -66,6 +66,12 @@ def createSprite(name, x):
                                      "img/inventory/blood.png",
                                      x)
             return sprite
+        case "candle":
+            sprite = InventorySprite("candle",
+                                     "warm and smells funny, mesmerising...",
+                                     "img/inventory/candle.png",
+                                     x)
+            return sprite
 
 
 # checks if mouse is hovering over sprite, if so, show description and name
