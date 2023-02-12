@@ -230,6 +230,20 @@ class Cabinet(GameSprite):
             self.setImage("img/kitchen/cabinet_empty.png", (500, 300))
 
 
+class Flower(GameSprite):
+    def __init__(self) -> None:
+        size = (100, 100)
+        pos = (200, 200)
+        createClass(self, "img/kitchen/flower.png", size, pos)
+
+    def changeState(self, state):
+        if state == "default":
+            self.setImage("img/kitchen/flower.png", (100, 100))
+        elif state == "light":
+            self.setImage("img/kitchen/flower_light.png", (100, 100))
+        elif state == "smash":
+            self.setImage("img/kitchen/flower_smash.png", (100, 100))
+
 class Oven(GameSprite):
     def __init__(self) -> None:
         size = (240, 180)

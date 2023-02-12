@@ -95,6 +95,7 @@ state_cabinet_visible = False
 state_lighter = False
 state_plant_pot = "default"
 state_kitchen_left_door = "default"
+state_flower = "default"
 
 fridge = sprites.Fridge()
 salmon_minigame = sprites.Salmon()
@@ -102,6 +103,7 @@ sink = sprites.Sink()
 cabinet = sprites.Cabinet()
 oven = sprites.Oven()
 kitchen_left_door = sprites.LeftDoor()
+flower = sprites.Flower()
 
 # secret lab assets
 state_secret_lab_door = "default"
@@ -450,6 +452,21 @@ while running:
                     state_kitchen_left_door = "default"
             kitchen_left_door.changeState(state_kitchen_left_door)
 
+            # flower logic
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.Rect(170, 165, 80, 85).collidepoint(pygame.mouse.get_pos()):
+                    glass_sound.play()
+                    chaos_bar.hit(2)
+                    state_flower = "smash"
+            else:
+                if pygame.Rect(170, 165, 80, 85).collidepoint(pygame.mouse.get_pos()) and not state_flower == "smash":
+                    state_flower = "light"
+                elif not state_flower == "smash":
+                    state_flower = "default"
+            flower.changeState(state_flower)
+
+
         elif scene == "secret_lab":
 
             # secret lab door logic
@@ -535,6 +552,7 @@ while running:
         sink.draw(screen)
         oven.draw(screen)
         kitchen_left_door.draw(screen)
+        flower.draw(screen)
 
         if state_salmon_visible:
             salmon_minigame.draw(screen)
