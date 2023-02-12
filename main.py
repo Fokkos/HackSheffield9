@@ -1,6 +1,5 @@
 import pygame
 import random
-import time
 from pygame import mixer
 
 from scripts import render_inventory, sprites
@@ -65,7 +64,6 @@ loreY = 75
 # living room assets
 state_bookshelf = "default"
 state_bookshelf_bottom = "default"
-state_armchair = "default"
 state_blue_book = "invisible"
 state_sage_book = "invisible"
 state_armchair = "default"
@@ -76,7 +74,6 @@ keypad_input = ""
 state_secret = False
 state_secret_door = "default"
 
-
 bookshelf = sprites.Bookshelf()
 blue_book = sprites.BlueBook()
 sage_book = sprites.SageBook()
@@ -84,7 +81,6 @@ armchair = sprites.Armchair()
 living_room_right_door = sprites.RightDoor()
 keypad = sprites.Keypad()
 secret_door = sprites.SecretDoorLeft()
-
 
 # kitchen assets
 state_fridge = "default"
@@ -121,21 +117,34 @@ lab_table = sprites.LabTable()
 blood_minigame = sprites.BloodMinigame()
 shelf = sprites.Shelf()
 
-regular_ending_flag = False
+
 
 timerCount = sprites.Countdown()
 
 # chaos meter
 chaos_bar = sprites.Chaosbar(constants.HOUSE_HEALTH)
 
+
 # ending assets
+regular_ending_flag = False
+true_ending_flag = False    # when the pentagram appears
+true_ending_start_flag = False  # when you click the pentagram
 
 def regular_ending():
     screen.blit(pygame.image.load("img/endings/regular_ending.png"), (0, 0))
-    score_text = font.render(("Score: " + str(constants.HOUSE_HEALTH - chaos_bar.clean_house) + "/" + str(constants.HOUSE_HEALTH)), True, (255, 255, 255))
+    score_text = font.render(
+        ("Score: " + str(constants.HOUSE_HEALTH - chaos_bar.clean_house) + "/" + str(constants.HOUSE_HEALTH)), True,
+        (255, 255, 255))
     screen.blit(score_text, (50, 100))
     summary = subtitle_font.render(chaos_bar.damageReport(), True, (255, 255, 255))
     screen.blit(summary, (0, 525))
+
+def check_for_true_ending():
+    if "candle" in inventory and "lighter" in inventory and "blood" in inventory and "salmon" in inventory:
+        (screen.blit(pygame.transform.scale(pygame.image.load("img/inventory/pentagram.png"), (75, 75)), (700, 495)))
+        true_ending_flag = True
+
+
 
 # sets the background size and position taking inventory bar into account
 def set_background(img_link):
@@ -161,7 +170,9 @@ def show_lore(y):
 def draw_inventory():
     screen.blit(inventory_bar, (0, screenY - inventory_bar.get_height()))
 
+
 start_ticks = 0
+
 # Game Loop
 
 running = True
@@ -170,16 +181,12 @@ while running:
     # RGB = Red, Green, Blue
     screen.fill((0, 0, 0))
     # Background Image
-    
-    
-    
+
     for event in pygame.event.get():
 
         if event.type == pygame.QUIT:
             running = False
-        
-        
-            
+
         if event.type == pygame.MOUSEMOTION:
             mousePosX, mousePosY = pygame.mouse.get_pos()
             pawX = mousePosX - (paw_img.get_width() / 2)
@@ -333,7 +340,7 @@ while running:
                         elif pygame.Rect(344, 189, 130, 65).collidepoint(pygame.mouse.get_pos()):
                             keypad_input += "5"
                         elif pygame.Rect(493, 189, 130, 65).collidepoint(pygame.mouse.get_pos()):
-                            keypad_input += "6" #255 321
+                            keypad_input += "6"  # 255 321
                         elif pygame.Rect(180, 255, 130, 60).collidepoint(pygame.mouse.get_pos()):
                             keypad_input += "7"
                         elif pygame.Rect(344, 255, 130, 65).collidepoint(pygame.mouse.get_pos()):
@@ -485,7 +492,6 @@ while running:
                     state_flower = "default"
             flower.changeState(state_flower)
 
-
         elif scene == "secret_lab":
 
             # secret lab door logic
@@ -536,6 +542,7 @@ while running:
                     thud_sound.play()
                     chaos_bar.hit(1)
                     state_shelf = "fall"
+                    inventory.append("candle")
                     state_candle_get = True
             else:
                 if pygame.Rect(425, 210, 100, 100).collidepoint(pygame.mouse.get_pos()) and not state_shelf == "fall":
@@ -543,7 +550,6 @@ while running:
                 elif not state_shelf == "fall":
                     state_shelf = "default"
             shelf.changeState(state_shelf)
-
 
     if scene == "title":
         screen.blit(title_screen, (0, 0))
@@ -553,11 +559,11 @@ while running:
         loreY -= .3
 
     else:
-        seconds_remaining = (pygame.time.get_ticks()-start_ticks)/1000 
-        
+        seconds_remaining = (pygame.time.get_ticks() - start_ticks) / 1000
+
         # print(seconds_remaining)
 
-        if seconds_remaining > constants.MAX_TIME: 
+        if seconds_remaining > constants.MAX_TIME:
             regular_ending_flag = True
 
         if scene == "living_room":
@@ -624,6 +630,11 @@ while running:
     if regular_ending_flag:
         show_inventory = False
         regular_ending()
+
+    check_for_true_ending()
+
     paw(pawX, pawY)
+
+
 
     pygame.display.update()
