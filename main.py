@@ -7,11 +7,9 @@ from scripts import render_inventory, sprites
 import constants
 
 # TODO:
-# name. the. cat. mittens :3
-# write the lore at the start of the game
-# draw sprites and environments
-# work out interactions ¬¬
-# inventory system (decide whether always visible or toolbar (i.e. minecraft))
+# add door to secret room
+# create secret room
+#
 # come up with "win conditions"
 # make endings depending on what player does
 
@@ -22,7 +20,7 @@ pygame.init()
 screenX = constants.SCREEN_X
 screenY = constants.SCREEN_Y
 screen = pygame.display.set_mode((screenX, screenY))
-# pygame.mouse.set_cursor((8, 8), (0, 0), (0, 0, 0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0, 0, 0))  # make cursor invisible
+pygame.mouse.set_cursor((8, 8), (0, 0), (0, 0, 0, 0, 0, 0, 0, 0), (0, 0, 0, 0, 0, 0, 0, 0))  # make cursor invisible
 start = False
 show_inventory = False
 scene = "title"  # look into setting as a dictionary?
@@ -50,15 +48,16 @@ tear_sound = mixer.Sound("sounds/tear.wav")
 chomp_sound = mixer.Sound("sounds/chomp.wav")
 door_sound = mixer.Sound("sounds/door.wav")
 water_sound = mixer.Sound("sounds/water.wav")
+glass_sound = mixer.Sound("sounds/glass.wav")
 
 # title screen assets
-title_screen = pygame.image.load("img/title-screen/title_screen.png")
+title_screen = pygame.image.load("img/title_screen/title_screen.png")
 start_button = sprites.StartButton()
 
 # lore page assets
 lore_music = mixer.Sound("sounds/space-odyssey.wav")
-lore = pygame.image.load("img/lore-screen/lore.png")
-skip = pygame.image.load("img/lore-screen/skip.png")
+lore = pygame.image.load("img/lore_screen/lore.png")
+skip = pygame.image.load("img/lore_screen/skip.png")
 loreY = 75
 
 # living room assets
@@ -73,6 +72,7 @@ state_keypad = "default"
 state_keypad_visible = False
 keypad_input = ""
 state_secret = False
+state_secret_door = "default"
 
 
 bookshelf = sprites.Bookshelf()
@@ -81,6 +81,7 @@ sage_book = sprites.SageBook()
 armchair = sprites.Armchair()
 living_room_right_door = sprites.RightDoor()
 keypad = sprites.Keypad()
+secret_door = sprites.SecretDoorLeft()
 
 
 # kitchen assets
@@ -102,6 +103,17 @@ cabinet = sprites.Cabinet()
 oven = sprites.Oven()
 kitchen_left_door = sprites.LeftDoor()
 
+# secret lab assets
+state_secret_lab_door = "default"
+state_lab_table = "default"
+state_blood_minigame_visible = False
+state_blood_minigame = "default"
+state_blood_get = False
+
+secret_lab_door = sprites.SecretDoorRight()
+lab_table = sprites.LabTable()
+blood_minigame = sprites.BloodMinigame()
+
 # chaos meter
 chaos_bar = sprites.Chaosbar(constants.HOUSE_HEALTH)
 
@@ -122,7 +134,7 @@ def meow_rng(n):
 
 
 def paw(x, y):
-    screen.blit(paw_img, (x, y))
+    screen.blit(paw_img, (x + 70, y))
 
 
 def show_lore(y):
@@ -170,18 +182,18 @@ while running:
                     lore_music.play()
                     scene = "exposition"
                 else:
-                    start_button.setImage("img/title-screen/start_button-hover.png", (150, 90))
+                    start_button.setImage("img/title_screen/start_button-hover.png", (150, 90))
             else:
-                start_button.setImage("img/title-screen/start_button.png", (150, 90))
+                start_button.setImage("img/title_screen/start_button.png", (150, 90))
 
         elif scene == "exposition":
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     print("space button pressed")
-                    scene = "living-room"
+                    scene = "living_room"
                     lore_music.stop()
 
-        elif scene == "living-room":
+        elif scene == "living_room":
             # book state logic
             if state_blue_book == "visible":
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -311,7 +323,7 @@ while running:
                         elif pygame.Rect(344, 321, 130, 65).collidepoint(pygame.mouse.get_pos()):
                             keypad_input += "0"
                         elif pygame.Rect(493, 321, 130, 65).collidepoint(pygame.mouse.get_pos()):
-                            if keypad_input == "11037":
+                            if keypad_input == "11037":  # funny number
                                 state_keypad = "correct"
                             else:
                                 state_keypad = "incorrect"
@@ -319,14 +331,26 @@ while running:
                         print(keypad_input)
                     else:
                         state_keypad_visible = False
-
             keypad.changeState(state_keypad)
+
+            # secret door logic
+            if state_secret:
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if pygame.Rect(0, 120, 70, 330).collidepoint(pygame.mouse.get_pos()):
+                        door_sound.play()
+                        scene = "secret_lab"
+                else:  # hover
+                    if pygame.Rect(0, 120, 70, 330).collidepoint(pygame.mouse.get_pos()):
+                        state_secret_door = "highlighted"
+                    else:
+                        state_secret_door = "default"
+                secret_door.changeState(state_secret_door)
 
         elif scene == "kitchen":
 
             # fridge logic
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if pygame.Rect(580, 130, 145, 295).collidepoint(pygame.mouse.get_pos()):
+                if pygame.Rect(580, 130, 145, 295).collidepoint(pygame.mouse.get_pos()) and not state_cabinet_visible:
                     state_salmon_visible = True
                     door_sound.play()
                     print("fridge clicked")
@@ -374,8 +398,7 @@ while running:
                     water_sound.play()
                     chaos_bar.hit(1)
                     state_sink_tap = True
-                elif pygame.Rect(440, 300, 140, 120).collidepoint(pygame.mouse.get_pos()):
-                    print("cupboard clicked")
+                elif pygame.Rect(440, 300, 140, 120).collidepoint(pygame.mouse.get_pos()) and not state_salmon_visible:
                     state_cabinet_visible = True
                     door_sound.play()
 
@@ -409,13 +432,17 @@ while running:
                 else:
                     if pygame.Rect(550, 250, 45, 100).collidepoint(pygame.mouse.get_pos()) and not state_lighter:
                         state_cabinet = "lighter_light"
+                    elif state_lighter:
+                        state_cabinet = "empty"
+                    else:
+                        state_cabinet = "default"
             cabinet.changeState(state_cabinet)
 
             # left kitchen door logic
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.Rect(0, 120, 70, 330).collidepoint(pygame.mouse.get_pos()):
                     door_sound.play()
-                    scene = "living-room"
+                    scene = "living_room"
             else:  # hover
                 if pygame.Rect(0, 120, 70, 330).collidepoint(pygame.mouse.get_pos()):
                     state_kitchen_left_door = "highlighted"
@@ -423,15 +450,60 @@ while running:
                     state_kitchen_left_door = "default"
             kitchen_left_door.changeState(state_kitchen_left_door)
 
+        elif scene == "secret_lab":
+
+            # secret lab door logic
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.Rect(740, 160, 60, 300).collidepoint(pygame.mouse.get_pos()):
+                    door_sound.play()
+                    scene = "living_room"
+            else:  # hover
+                if pygame.Rect(740, 160, 60, 300).collidepoint(pygame.mouse.get_pos()):
+                    state_secret_lab_door = "highlighted"
+                else:
+                    state_secret_lab_door = "default"
+            secret_lab_door.changeState(state_secret_lab_door)
+
+            # secret lab table logic
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.Rect(160, 295, 65, 80).collidepoint(pygame.mouse.get_pos()):
+                    state_blood_minigame_visible = True
+            else:  # hover
+                if pygame.Rect(160, 295, 65, 80).collidepoint(pygame.mouse.get_pos()):
+                    state_lab_table = "light"
+                else:
+                    state_lab_table = "default"
+            lab_table.changeState(state_lab_table)
+
+            # blood minigame logic
+            if state_blood_minigame_visible:
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if pygame.Rect(150, 100, 500, 300).collidepoint(pygame.mouse.get_pos()):
+                        if pygame.Rect(335, 150, 60, 120).collidepoint(pygame.mouse.get_pos()) and not state_blood_get:
+                            state_blood_minigame = "finish"
+                            glass_sound.play()
+                            state_blood_get = True
+                            inventory.append("blood")
+                            chaos_bar.hit(2)
+                    else:
+                        state_blood_minigame_visible = False
+                else:
+                    if pygame.Rect(335, 150, 60, 120).collidepoint(pygame.mouse.get_pos()) and not state_blood_get:
+                        state_blood_minigame = "light"
+                    elif not state_blood_get:
+                        state_blood_minigame = "default"
+            blood_minigame.changeState(state_blood_minigame)
+
+
     if scene == "title":
         screen.blit(title_screen, (0, 0))
         start_button.draw(screen)
     elif scene == "exposition":
         show_lore(loreY)
         loreY -= .3
-    elif scene == "living-room":
+    elif scene == "living_room":
 
-        set_background('img/living-room/living-room.png')
+        set_background('img/living_room/living_room.png')
         bookshelf.draw(screen)
         armchair.draw(screen)
         living_room_right_door.draw(screen)
@@ -443,11 +515,9 @@ while running:
             keypad.draw(screen)
 
         if state_secret:
-            print("SECRET ROOM UNLOCKED")
+            secret_door.draw(screen)
 
         chaos_bar.update(screen)
-
-
 
         if state_blue_book == "visible" or state_blue_book == "eaten":
             blue_book.draw(screen)
@@ -472,9 +542,19 @@ while running:
             cabinet.draw(screen)
 
         chaos_bar.update(screen)
+
+    elif scene == "secret_lab":
+        set_background('img/secret_lab/secret_lab.png')
+
+        secret_lab_door.draw(screen)
+        lab_table.draw(screen)
+
+        if state_blood_minigame_visible:
+            blood_minigame.draw(screen)
+
     elif scene == "ending":
         # TODO: Change image and update message to display progress
-        set_background('img/living-room/living-room.png')
+        set_background('img/living_room/living_room.png')
 
         ending1.draw(chaos_bar.damageReport(), screen)
 
