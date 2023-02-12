@@ -26,6 +26,7 @@ show_inventory = False
 scene = "title"  # look into setting as a dictionary?
 
 font = pygame.font.Font('freesansbold.ttf', 32)
+subtitle_font = pygame.font.Font('freesansbold.ttf', 22)
 
 # caption and icon
 pygame.display.set_caption("kitty simulator >:3")
@@ -49,6 +50,7 @@ chomp_sound = mixer.Sound("sounds/chomp.wav")
 door_sound = mixer.Sound("sounds/door.wav")
 water_sound = mixer.Sound("sounds/water.wav")
 glass_sound = mixer.Sound("sounds/glass.wav")
+thud_sound = mixer.Sound("sounds/thud.wav")
 
 # title screen assets
 title_screen = pygame.image.load("img/title_screen/title_screen.png")
@@ -111,10 +113,15 @@ state_lab_table = "default"
 state_blood_minigame_visible = False
 state_blood_minigame = "default"
 state_blood_get = False
+state_shelf = "default"
+state_candle_get = False
 
 secret_lab_door = sprites.SecretDoorRight()
 lab_table = sprites.LabTable()
 blood_minigame = sprites.BloodMinigame()
+shelf = sprites.Shelf()
+
+regular_ending_flag = False
 
 timerCount = sprites.Countdown()
 
@@ -122,8 +129,13 @@ timerCount = sprites.Countdown()
 chaos_bar = sprites.Chaosbar(constants.HOUSE_HEALTH)
 
 # ending assets
-ending1 = sprites.Endings()
 
+def regular_ending():
+    screen.blit(pygame.image.load("img/endings/regular_ending.png"), (0, 0))
+    score_text = font.render(("Score: " + str(constants.HOUSE_HEALTH - chaos_bar.clean_house) + "/" + str(constants.HOUSE_HEALTH)), True, (255, 255, 255))
+    screen.blit(score_text, (50, 100))
+    summary = subtitle_font.render(chaos_bar.damageReport(), True, (255, 255, 255))
+    screen.blit(summary, (0, 525))
 
 # sets the background size and position taking inventory bar into account
 def set_background(img_link):
@@ -277,8 +289,7 @@ while running:
             # armchair logic
             if event.type == pygame.MOUSEBUTTONDOWN and not state_keypad_visible:
                 if pygame.Rect(520, 340, 100, 50).collidepoint(pygame.mouse.get_pos()):
-                    print("program pillow interactivity")
-                    scene = "ending"
+                    regular_ending_flag = True
             else:  # hover
                 if pygame.Rect(520, 340, 100, 50).collidepoint(pygame.mouse.get_pos()):
                     state_armchair = "highlighted"
@@ -461,7 +472,6 @@ while running:
             kitchen_left_door.changeState(state_kitchen_left_door)
 
             # flower logic
-
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pygame.Rect(170, 165, 80, 85).collidepoint(pygame.mouse.get_pos()):
                     glass_sound.play()
@@ -518,6 +528,20 @@ while running:
                     elif not state_blood_get:
                         state_blood_minigame = "default"
             blood_minigame.changeState(state_blood_minigame)
+
+            # shelf logic
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.Rect(425, 210, 100, 100).collidepoint(pygame.mouse.get_pos()) and not state_candle_get:
+                    thud_sound.play()
+                    chaos_bar.hit(1)
+                    state_shelf = "fall"
+                    state_candle_get = True
+            else:
+                if pygame.Rect(425, 210, 100, 100).collidepoint(pygame.mouse.get_pos()) and not state_shelf == "fall":
+                    state_shelf = "light"
+                elif not state_shelf == "fall":
+                    state_shelf = "default"
+            shelf.changeState(state_shelf)
 
 
     if scene == "title":
@@ -583,21 +607,19 @@ while running:
 
             secret_lab_door.draw(screen)
             lab_table.draw(screen)
+            shelf.draw(screen)
 
             if state_blood_minigame_visible:
                 blood_minigame.draw(screen)
-
-        elif scene == "ending":
-            # TODO: Change image and update message to display progress
-            set_background('img/living_room/living_room.png')
-
-            ending1.draw(chaos_bar.damageReport(), screen)
 
     if show_inventory:
         draw_inventory()
         if len(inventory) > 0:
             render_inventory.render_inventory_bar(screen, inventory)
 
+    if regular_ending_flag:
+        show_inventory = False
+        regular_ending()
     paw(pawX, pawY)
 
     pygame.display.update()

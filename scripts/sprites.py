@@ -262,6 +262,21 @@ class LabTable(GameSprite):
         elif state == "light":
             self.setImage("img/secret_lab/table_light.png", (280, 250))
 
+class Shelf(GameSprite):
+    def __init__(self) -> None:
+        size = (350, 400)
+        pos = (500, 390)
+        createClass(self, "img/secret_lab/shelf.png", size, pos)
+
+    def changeState(self, state):
+        if state == "default":
+            self.setImage("img/secret_lab/shelf.png", (280, 250))
+        elif state == "light":
+            self.setImage("img/secret_lab/shelf_light.png", (280, 250))
+        elif state == "fall":
+            self.setImage("img/secret_lab/shelf_fall.png", (280, 250))
+
+
 
 class BloodMinigame(GameSprite):
     def __init__(self) -> None:
