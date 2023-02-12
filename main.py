@@ -71,6 +71,7 @@ state_living_room_right_door = "default"
 state_keypad = "default"
 state_keypad_visible = False
 keypad_input = ""
+state_secret = False
 
 
 bookshelf = sprites.Bookshelf()
@@ -205,7 +206,7 @@ while running:
                         state_sage_book = "invisible-torn"
 
             # bookshelf logic
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN and not state_keypad_visible:
                 if pygame.Rect(138, 193, 35, 60).collidepoint(pygame.mouse.get_pos()):
                     if state_blue_book == "invisible":
                         state_blue_book = "visible"
@@ -275,6 +276,14 @@ while running:
 
             # keypad logic
             if state_keypad_visible:
+                if state_keypad == "correct" or state_keypad == "incorrect":
+                    pygame.time.wait(1000)
+                    if state_keypad == "correct":
+                        state_keypad_visible = False
+                        state_secret = True
+                    state_keypad = "default"
+                    keypad_input = ""
+
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if pygame.Rect(150, 100, 500, 300).collidepoint(pygame.mouse.get_pos()):
                         if pygame.Rect(180, 122, 130, 60).collidepoint(pygame.mouse.get_pos()):
@@ -301,17 +310,15 @@ while running:
                             keypad_input += "0"
                         elif pygame.Rect(493, 321, 130, 65).collidepoint(pygame.mouse.get_pos()):
                             if keypad_input == "11037":
-                                print("CORRECT INPUT")
+                                state_keypad = "correct"
+                            else:
+                                state_keypad = "incorrect"
 
                         print(keypad_input)
-
-
                     else:
                         state_keypad_visible = False
 
             keypad.changeState(state_keypad)
-
-
 
         elif scene == "kitchen":
 
@@ -432,6 +439,9 @@ while running:
 
         if state_keypad_visible:
             keypad.draw(screen)
+
+        if state_secret:
+            print("SECRET ROOM UNLOCKED")
 
         chaos_bar.update(screen)
 

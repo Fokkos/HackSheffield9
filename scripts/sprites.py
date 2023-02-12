@@ -104,6 +104,10 @@ class Keypad(GameSprite):
     def changeState(self, state):
         if state == "default":
             self.setImage("img/living-room/keypad.png", (500, 300))
+        elif state == "correct":
+            self.setImage("img/living-room/keypad_correct.png", (500, 300))
+        elif state == "incorrect":
+            self.setImage("img/living-room/keypad_incorrect.png", (500, 300))
 
 
 class RightDoor(GameSprite):
