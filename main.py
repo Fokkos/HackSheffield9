@@ -147,7 +147,7 @@ def check_for_true_ending():
 
 
 
-def special_ending():
+def true_ending():
     screen.blit(pygame.image.load("img/endings/special_ending.png"), (0, 0))
     score_text = font.render("Unlocked special ending. ", True, (255, 255, 255))
     screen.blit(score_text, (50, 100))
@@ -648,7 +648,7 @@ while running:
 
     if true_ending_start_flag:
         show_inventory = False
-        special_ending()
+        true_ending()
     paw(pawX, pawY)
 
 
