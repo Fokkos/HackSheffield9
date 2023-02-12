@@ -129,6 +129,9 @@ chaos_bar = sprites.Chaosbar(constants.HOUSE_HEALTH)
 regular_ending_flag = False
 true_ending_flag = False    # when the pentagram appears
 true_ending_start_flag = False  # when you click the pentagram
+state_pentagram = "default"
+
+pentagram = sprites.Pentagram()
 
 def regular_ending():
     screen.blit(pygame.image.load("img/endings/regular_ending.png"), (0, 0))
@@ -139,11 +142,12 @@ def regular_ending():
     summary = subtitle_font.render(chaos_bar.damageReport(), True, (255, 255, 255))
     screen.blit(summary, (0, 525))
 
+
 def check_for_true_ending():
     if "candle" in inventory and "lighter" in inventory and "blood" in inventory and "salmon" in inventory:
-        (screen.blit(pygame.transform.scale(pygame.image.load("img/inventory/pentagram.png"), (75, 75)), (700, 495)))
-        true_ending_flag = True
-
+        return True
+    else:
+        return False
 
 
 # sets the background size and position taking inventory bar into account
@@ -197,12 +201,24 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             print(pygame.mouse.get_pos())
             paw_img = pygame.image.load('img/player/paw_claw.png')
-            meow_rng(5)
+            meow_rng(8)
             claw_mark.append(pygame.mouse.get_pos())
         elif event.type == pygame.MOUSEBUTTONUP:
             paw_img = pygame.image.load('img/player/Paw.png')
             cat_sound.stop()
             claw_mark = []
+
+        # pentagram logic
+        if true_ending_flag:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.Rect(615, 500, 100, 85).collidepoint(pygame.mouse.get_pos()):
+                    print("true ending trigger")
+            else:
+                if pygame.Rect(615, 500, 100, 85).collidepoint(pygame.mouse.get_pos()):
+                    state_pentagram = "light"
+                else:
+                    state_pentagram = "default"
+            pentagram.changeState(state_pentagram)
 
         if scene == "title":
             if start_button.rect.collidepoint(pygame.mouse.get_pos()):
@@ -631,7 +647,10 @@ while running:
         show_inventory = False
         regular_ending()
 
-    check_for_true_ending()
+    true_ending_flag = check_for_true_ending()
+
+    if true_ending_flag:
+        pentagram.draw(screen)
 
     paw(pawX, pawY)
 
