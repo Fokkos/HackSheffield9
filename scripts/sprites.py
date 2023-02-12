@@ -95,6 +95,17 @@ class Armchair(GameSprite):
     def catSleep(self, screen, ending1):
         ending1.draw(screen)
 
+class Keypad(GameSprite):
+    def __init__(self) -> None:
+        size = (500, 300)
+        pos = (400, 250)
+        createClass(self, "img/living-room/keypad.png", size, pos)
+
+    def changeState(self, state):
+        if state == "default":
+            self.setImage("img/living-room/keypad.png", (500, 300))
+
+
 class RightDoor(GameSprite):
     def __init__(self) -> None:
         size = (64, 315)

@@ -68,12 +68,18 @@ state_blue_book = "invisible"
 state_sage_book = "invisible"
 state_armchair = "default"
 state_living_room_right_door = "default"
+state_keypad = "default"
+state_keypad_visible = False
+keypad_input = ""
+
 
 bookshelf = sprites.Bookshelf()
 blue_book = sprites.BlueBook()
 sage_book = sprites.SageBook()
 armchair = sprites.Armchair()
 living_room_right_door = sprites.RightDoor()
+keypad = sprites.Keypad()
+
 
 # kitchen assets
 state_fridge = "default"
@@ -231,7 +237,7 @@ while running:
             else:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if pygame.Rect(208, 344, 50, 50).collidepoint(pygame.mouse.get_pos()):
-                        print("implement keypad")
+                        state_keypad_visible = True
                 else:  # hover
                     if pygame.Rect(208, 344, 50, 50).collidepoint(pygame.mouse.get_pos()):
                         state_bookshelf = "final_light_keypad"
@@ -244,7 +250,7 @@ while running:
             bookshelf.changeState(state_bookshelf)
 
             # armchair logic
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN and not state_keypad_visible:
                 if pygame.Rect(520, 340, 100, 50).collidepoint(pygame.mouse.get_pos()):
                     print("program pillow interactivity")
                     scene = "ending"
@@ -266,6 +272,46 @@ while running:
                 else:
                     state_living_room_right_door = "default"
             living_room_right_door.changeState(state_living_room_right_door)
+
+            # keypad logic
+            if state_keypad_visible:
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if pygame.Rect(150, 100, 500, 300).collidepoint(pygame.mouse.get_pos()):
+                        if pygame.Rect(180, 122, 130, 60).collidepoint(pygame.mouse.get_pos()):
+                            keypad_input += "1"
+                        elif pygame.Rect(344, 122, 130, 65).collidepoint(pygame.mouse.get_pos()):
+                            keypad_input += "2"
+                        elif pygame.Rect(493, 122, 130, 65).collidepoint(pygame.mouse.get_pos()):
+                            keypad_input += "3"
+                        elif pygame.Rect(180, 189, 130, 60).collidepoint(pygame.mouse.get_pos()):
+                            keypad_input += "4"
+                        elif pygame.Rect(344, 189, 130, 65).collidepoint(pygame.mouse.get_pos()):
+                            keypad_input += "5"
+                        elif pygame.Rect(493, 189, 130, 65).collidepoint(pygame.mouse.get_pos()):
+                            keypad_input += "6" #255 321
+                        elif pygame.Rect(180, 255, 130, 60).collidepoint(pygame.mouse.get_pos()):
+                            keypad_input += "7"
+                        elif pygame.Rect(344, 255, 130, 65).collidepoint(pygame.mouse.get_pos()):
+                            keypad_input += "8"
+                        elif pygame.Rect(493, 255, 130, 65).collidepoint(pygame.mouse.get_pos()):
+                            keypad_input += "9"
+                        elif pygame.Rect(180, 321, 130, 60).collidepoint(pygame.mouse.get_pos()):
+                            keypad_input = ""
+                        elif pygame.Rect(344, 321, 130, 65).collidepoint(pygame.mouse.get_pos()):
+                            keypad_input += "0"
+                        elif pygame.Rect(493, 321, 130, 65).collidepoint(pygame.mouse.get_pos()):
+                            if keypad_input == "11037":
+                                print("CORRECT INPUT")
+
+                        print(keypad_input)
+
+
+                    else:
+                        state_keypad_visible = False
+
+            keypad.changeState(state_keypad)
+
+
 
         elif scene == "kitchen":
 
@@ -383,7 +429,13 @@ while running:
         chaos_bar.default_bar(screen)
         # pygame.draw.rect(screen, (255,0,0), (600, 10, 150, 30))
         show_inventory = True
+
+        if state_keypad_visible:
+            keypad.draw(screen)
+
         chaos_bar.update(screen)
+
+
 
         if state_blue_book == "visible" or state_blue_book == "eaten":
             blue_book.draw(screen)
