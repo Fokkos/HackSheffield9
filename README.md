@@ -6,4 +6,4 @@ To Install, ensure you are using Python 3.10 or above and make sure you have pyg
 
 The game is a point and click adventure game where you, an adopted cat name Mittens, formerly owned by notorious super-villain Professor Dog-Kicker, find themselves adopted by one of the heroes of the story. 
 
-You explore their house, acting like a cat would, knocking over objects and going where you shouldn't to cause as much chaos as possible before your afternoon nap in 5 minutes time
+You must explore their house, acting like a cat would, knocking over objects and going where you shouldn't to cause as much chaos as possible before your afternoon nap in 5 minutes time
