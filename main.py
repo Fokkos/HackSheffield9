@@ -122,6 +122,7 @@ blood_minigame = sprites.BloodMinigame()
 shelf = sprites.Shelf()
 
 regular_ending_flag = False
+special_ending_flag = False
 
 timerCount = sprites.Countdown()
 
@@ -137,6 +138,10 @@ def regular_ending():
     summary = subtitle_font.render(chaos_bar.damageReport(), True, (255, 255, 255))
     screen.blit(summary, (0, 525))
 
+def special_ending():
+    screen.blit(pygame.image.load("img/endings/special_ending.png"), (0, 0))
+    score_text = font.render("Unlocked special ending. ", True, (255, 255, 255))
+    screen.blit(score_text, (50, 100))
 # sets the background size and position taking inventory bar into account
 def set_background(img_link):
     screen.blit(pygame.transform.scale(pygame.image.load(img_link), (800, 500)), (0, 0))
@@ -615,6 +620,8 @@ while running:
                 blood_minigame.draw(screen)
             timerCount.update(seconds_remaining, screen)
 
+            chaos_bar.update(screen)
+
     if show_inventory:
         draw_inventory()
         if len(inventory) > 0:
@@ -623,6 +630,10 @@ while running:
     if regular_ending_flag:
         show_inventory = False
         regular_ending()
+
+    elif special_ending_flag:
+        show_inventory = False
+        special_ending()
     paw(pawX, pawY)
 
     pygame.display.update()
